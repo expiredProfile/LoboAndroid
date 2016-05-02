@@ -19,9 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.RequestParams;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
@@ -62,10 +61,13 @@ public class MainActivity extends AppCompatActivity
         myAdapter = new SimpleCursorAdapter(this, R.layout.conversation_list_item,
                 null, fromColumns, toViews, 0);
 
-        getLoaderManager().initLoader(0, null, this);
+        //getLoaderManager().initLoader(0, null, this);
 
         ListView lv = (ListView)findViewById(R.id.myListView);
         lv.setAdapter(myAdapter);
+
+
+
     }
 
     @Override
@@ -140,10 +142,6 @@ public class MainActivity extends AppCompatActivity
     public void onLoaderReset(android.content.Loader<Cursor> loader) {
         Log.d(MYNAME, "onLoaderReset()");
         myAdapter.swapCursor(null);
-    }
-
-    public void restTest(RequestParams params){
-        AsyncHttpClient client = new AsyncHttpClient();
     }
 
 }

@@ -35,6 +35,10 @@
             android:label="New Conversation"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <provider
+            android:authorities="com.example.provider.chatProvider"
+            android:name=".ChatProvider"/>
     </application>
 
 </manifest>
