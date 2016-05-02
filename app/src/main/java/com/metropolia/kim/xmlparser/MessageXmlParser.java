@@ -57,7 +57,7 @@ public class MessageXmlParser {
             }
             String name = parser.getName();
             // Starts by looking for the entry tag
-            if (name.equals("player")) {
+            if (name.equals("message")) {
                 entries.add(readEntry(parser));
             } else {
                 skip(parser);

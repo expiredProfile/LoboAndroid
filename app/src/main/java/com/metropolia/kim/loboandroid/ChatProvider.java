@@ -38,30 +38,30 @@ public class ChatProvider extends ContentProvider {
     static final String ALERTS_TABLE_NAME = "alerts";
     static final int DATABASE_VERSION = 1;
     static final String CREATE_DB_TABLES =
-            " CREATE TABLE " + WORKERS_TABLE_NAME +
+            "CREATE TABLE " + WORKERS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " name TEXT NOT NULL, " +
                     " professionid TEXT NOT NULL," +
-                    " title TEXT NOT NULL)"
+                    " title TEXT NOT NULL);"
 
-                    + "CREATE TABLE " + MESSAGES_TABLE_NAME +
+                    + " CREATE TABLE " + MESSAGES_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " content TEXT NOT NULL, " +
                     " conversationid TEXT NOT NULL," +
                     " postname TEXT NOT NULL,"
-                    + "shorttimestamp TEXT NOT NULL)"
+                    + "shorttimestamp TEXT NOT NULL);"
 
-                    + "CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
+                    + " CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY, " +
-                    " topic TEXT NOT NULL)"
+                    " topic TEXT NOT NULL);"
 
-                    + "CREATE TABLE " + ALERTS_TABLE_NAME +
+                    + " CREATE TABLE " + ALERTS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY, " +
                     " topic TEXT NOT NULL, " +
                     " currenttime TEXT NOT NULL," +
                     " category INTEGER NOT NULL," +
                     " postname TEXT NOT NULL," +
-                    " receivergroup INTEGER NOT NULL)";
+                    " receivergroup INTEGER NOT NULL);";
 
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
