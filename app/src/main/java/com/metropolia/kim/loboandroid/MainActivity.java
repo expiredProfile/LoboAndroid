@@ -1,5 +1,6 @@
 package com.metropolia.kim.loboandroid;
 
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,8 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import java.net.MalformedURLException;
-import java.net.URL;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
@@ -143,5 +143,4 @@ public class MainActivity extends AppCompatActivity
         Log.d(MYNAME, "onLoaderReset()");
         myAdapter.swapCursor(null);
     }
-
 }
