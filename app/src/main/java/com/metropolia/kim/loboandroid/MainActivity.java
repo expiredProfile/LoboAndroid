@@ -1,5 +1,6 @@
 package com.metropolia.kim.loboandroid;
 
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,9 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.RequestParams;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
@@ -141,9 +139,4 @@ public class MainActivity extends AppCompatActivity
         Log.d(MYNAME, "onLoaderReset()");
         myAdapter.swapCursor(null);
     }
-
-    public void restTest(RequestParams params){
-        AsyncHttpClient client = new AsyncHttpClient();
-    }
-
 }
