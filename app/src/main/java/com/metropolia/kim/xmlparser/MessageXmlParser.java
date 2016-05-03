@@ -1,5 +1,6 @@
 package com.metropolia.kim.xmlparser;
 
+import android.util.Log;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -26,7 +27,7 @@ public class MessageXmlParser {
             parser.nextTag();
             return readFeed(parser);
         } finally {
-            in.close();
+            //in.close();
         }
     }
 
