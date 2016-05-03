@@ -24,8 +24,8 @@ import java.util.List;
 
 public class NetworkingTask extends AsyncTask<String, String, String> {
     private HttpURLConnection httpURLConnection;
-    private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
-    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
+    //private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
+    private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
     private Context context;
     public NetworkingTask(Context context) {
         this.context = context;
@@ -52,6 +52,35 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                 case "conversation":
                     ConversationXmlParser xmlParser = new ConversationXmlParser();
                     List<Conversation> conversations = xmlParser.parse(is);
+                    Uri deleteUri = Uri.parse(ChatProvider.URL+"/members/flush");
+                    this.context.getContentResolver().delete(deleteUri,null,null);
+                    for (Conversation c : conversations){
+                        ContentValues values = new ContentValues();
+                        values.put("_id", c.getID());
+                        values.put("topic",c.getTopic());
+                        Uri uri = Uri.parse(ChatProvider.URL + "/conversations/insert");
+                        this.context.getContentResolver().insert(uri, values);
+                        List<Message> messages = c.getMessages();
+                        for (Message m : messages){
+                            ContentValues val = new ContentValues();
+                            val.put("content",m.getContent());
+                            val.put("conversationid",m.getConversationID());
+                            val.put("postname",m.getPostName());
+                            val.put("shorttimestamp",m.getShortTime());
+                            Uri uri2 = Uri.parse(ChatProvider.URL + "/messages/insert");
+                            this.context.getContentResolver().insert(uri2, val);
+                        }
+
+                        List<Worker> members = c.getMemberList();
+                        for (Worker w : members){
+                            ContentValues memVal = new ContentValues();
+                            memVal.put("_id",c.getID());
+                            memVal.put("topic",c.getTopic());
+                            memVal.put("workername",w.getName());
+                            Uri memU = Uri.parse(ChatProvider.URL + "/members/insert");
+                            this.context.getContentResolver().insert(memU, memVal);
+                        }
+                    }
 
                 case "message":
                     MessageXmlParser messsageParser = new MessageXmlParser();

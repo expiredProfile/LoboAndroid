@@ -1,6 +1,7 @@
 package com.metropolia.kim.loboandroid;
 
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.widget.SimpleCursorAdapter;
 public class UsersActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor>{
     private SimpleCursorAdapter adapter;
     private ListView listView;
+    private String workerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +31,15 @@ public class UsersActivity extends AppCompatActivity implements android.app.Load
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.listView = (ListView) findViewById(R.id.myListView);
-
+        Intent i = getIntent();
+        workerName = i.getStringExtra("workerName");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(UsersActivity.this, CreateConversationActivity.class);
+                intent.putExtra("workerName",workerName);
+                startActivity(intent);
             }
         });
 
@@ -73,8 +77,9 @@ public class UsersActivity extends AppCompatActivity implements android.app.Load
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d("oma","onCreateLoader()");
         String[] projection = {"_id", "name", "title"};
+        String selection = "name != '"+workerName+"'";
         Uri uri = Uri.parse(ChatProvider.URL + "/workers");
-        return new CursorLoader(this, uri, projection, null, null, null);
+        return new CursorLoader(this, uri, projection, selection, null, null);
     }
 
     @Override

@@ -36,12 +36,15 @@ public class ChatProvider extends ContentProvider {
     private static final int INSERT_ALERT = 9;
     private static final int ALERTS_HISTORY = 10;
 
+    private static final int INSERT_MEMBER = 11;
+    private static final int FLUSH_MEMBER = 12;
+
 
     static final UriMatcher uriMatcher;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "conversations/name/#",CONVERSATIONS_NAME);
+        uriMatcher.addURI(PROVIDER_NAME, "conversations/name",CONVERSATIONS_NAME);
         uriMatcher.addURI(PROVIDER_NAME, "conversations/id/#",CONVERSATION_ID);
         uriMatcher.addURI(PROVIDER_NAME, "messages/#",MESSAGES_BY_ID);
         uriMatcher.addURI(PROVIDER_NAME, "messages/latest/#",MESSAGES_LATEST_ID);
@@ -53,6 +56,9 @@ public class ChatProvider extends ContentProvider {
 
         uriMatcher.addURI(PROVIDER_NAME,"alerts/insert",INSERT_ALERT);
         uriMatcher.addURI(PROVIDER_NAME,"alerts/range/#",ALERTS_HISTORY);
+
+        uriMatcher.addURI(PROVIDER_NAME,"/members/insert",INSERT_MEMBER);
+        uriMatcher.addURI(PROVIDER_NAME,"/members/flush",FLUSH_MEMBER);
     }
 
     private SQLiteDatabase database;
@@ -61,6 +67,7 @@ public class ChatProvider extends ContentProvider {
     static final String MESSAGES_TABLE_NAME = "messages";
     static final String CONVERSATIONS_TABLE_NAME = "conversations";
     static final String ALERTS_TABLE_NAME = "alerts";
+    static final String CONVERSATION_MEMBER_NAME = "members";
     static final int DATABASE_VERSION = 1;
     static final String CREATE_DB_TABLES =
             "CREATE TABLE " + WORKERS_TABLE_NAME +
@@ -80,6 +87,12 @@ public class ChatProvider extends ContentProvider {
                     + " CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY, " +
                     " topic TEXT NOT NULL);"
+
+                    + " CREATE TABLE " + CONVERSATION_MEMBER_NAME +
+                    " (_id INTEGER PRIMARY KEY, " +
+                    " topic TEXT NOT NULL,"+
+                    " workername INTEGER NOT NULL);"
+
 
                     + " CREATE TABLE " + ALERTS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY, " +
@@ -124,7 +137,7 @@ public class ChatProvider extends ContentProvider {
         Cursor c = null;
         switch(match){
             case CONVERSATIONS_NAME:
-                c = database.query("conversations", projection, selection, selectionArgs, null, null, sortOrder);
+                c = database.query(CONVERSATION_MEMBER_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case CONVERSATION_ID:
                 c = database.query("conversations", projection, selection, selectionArgs, null, null, sortOrder);
@@ -178,6 +191,9 @@ public class ChatProvider extends ContentProvider {
             case INSERT_ALERT:
                 database.insertWithOnConflict("alerts", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
                 break;
+            case INSERT_MEMBER:
+                database.insert("members",null,values);
+                break;
             default:
                 Log.d("oma","Insert default");
         }
@@ -187,6 +203,15 @@ public class ChatProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        int match = uriMatcher.match(uri);
+        switch (match){
+            case FLUSH_MEMBER:
+                database.rawQuery("DELETE FROM members",null);
+                break;
+            default:
+                break;
+        }
+
         return 0;
     }
 
