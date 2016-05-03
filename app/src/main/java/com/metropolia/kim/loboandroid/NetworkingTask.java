@@ -64,9 +64,6 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         } else {
                             values.put("title", w.getTitle());
                         }
-                        values.put("title", w.getTitle());
-                        values.put("workerid", w.getId());
-                        values.put("title", w.getTitle());
                         values.put("workerid", w.getId());
                         Uri uri = Uri.parse(ChatProvider.URL+"/workers/insert");
                         this.context.getContentResolver().insert(uri, values);
