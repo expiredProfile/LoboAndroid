@@ -33,6 +33,9 @@ public class ChatProvider extends ContentProvider {
     private static final int INSERT_CONVERSATION = 7;
     private static final int INSERT_MESSAGE = 8;
 
+    private static final int INSERT_ALERT = 9;
+    private static final int ALERTS_HISTORY = 10;
+
 
     static final UriMatcher uriMatcher;
 
@@ -47,6 +50,9 @@ public class ChatProvider extends ContentProvider {
         uriMatcher.addURI(PROVIDER_NAME,"workers/insert",INSERT_WORKER);
         uriMatcher.addURI(PROVIDER_NAME,"conversations/insert",INSERT_CONVERSATION);
         uriMatcher.addURI(PROVIDER_NAME,"messages/insert",INSERT_MESSAGE);
+
+        uriMatcher.addURI(PROVIDER_NAME,"alerts/insert",INSERT_ALERT);
+        uriMatcher.addURI(PROVIDER_NAME,"alerts/range/#",ALERTS_HISTORY);
     }
 
     private SQLiteDatabase database;
@@ -133,6 +139,10 @@ public class ChatProvider extends ContentProvider {
                 c = database.query("workers", projection, selection, selectionArgs, null, null, sortOrder);
                 Log.d("oma","worker query()");
                 break;
+            case ALERTS_HISTORY:
+                c = database.query("alerts", projection, selection, selectionArgs, null, null, sortOrder);
+                Log.d("oma","alert history query()");
+                break;
             default:
                 Log.d("oma", "Invalid uri");
                 break;
@@ -164,6 +174,9 @@ public class ChatProvider extends ContentProvider {
                 break;
             case INSERT_MESSAGE:
                 database.insertWithOnConflict("messages", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                break;
+            case INSERT_ALERT:
+                database.insertWithOnConflict("alerts", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
                 break;
             default:
                 Log.d("oma","Insert default");

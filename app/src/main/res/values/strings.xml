@@ -19,4 +19,11 @@
     <string name="recRadio1">Guards</string>
     <string name="recRadio2">Doctors</string>
     <string name="recRadio3">All</string>
+
+    <string name="alertHistory">Alert history, choose range</string>
+    <string name="alertHistoryBtn">Get alerts</string>
+
+    <string name="hisRadio1">5 latest</string>
+    <string name="hisRadio2">10 latest</string>
+    <string name="hisRadio3">All</string>
 </resources>

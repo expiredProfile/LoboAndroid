@@ -80,13 +80,24 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                             values.put("title", w.getTitle());
                         }
                         values.put("workerid", w.getId());
-                        Uri uri = Uri.parse(ChatProvider.URL+"/workers/insert");
+                        Uri uri = Uri.parse(ChatProvider.URL + "/workers/insert");
                         this.context.getContentResolver().insert(uri, values);
 
                     }
                 case "alert":
                     AlertXmlParser alertParser = new AlertXmlParser();
                     List<Alert> alerts = alertParser.parse(is);
+                    for (Alert a : alerts) {
+                        ContentValues values = new ContentValues();
+
+                        values.put("topic", a.getAlertTopic());
+                        values.put("currenttime", a.getCurrentTime());
+                        values.put("category", a.getAlertCat());
+                        values.put("postname", a.getPostName());
+                        values.put("receivergroup", a.getReceiverGroup());
+                        Uri uri = Uri.parse(ChatProvider.URL + "/alerts/insert");
+                        this.context.getContentResolver().insert(uri, values);
+                    }
             }
 
         } catch (Exception e) {
