@@ -32,6 +32,12 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+        <activity
+            android:name=".ConversationActivity"
+            android:label="Conversation"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
