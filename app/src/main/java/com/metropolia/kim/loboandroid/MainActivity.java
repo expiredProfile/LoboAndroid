@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity
     private Intent usersIntent;
     private static final String MYNAME = "LoboAndroid";
     SimpleCursorAdapter myAdapter;
+    private String workerName;
+    private String workerTitle;
 
 
     @Override
@@ -55,6 +58,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView username = (TextView)findViewById(R.id.textUsername);
+        TextView title = (TextView)findViewById(R.id.textProfession);
+        Intent i = getIntent();
+        workerName = i.getStringExtra("workerName");
+        workerTitle = i.getStringExtra("workerTitle");
+        username.setText(i.getStringExtra("workerName"));
+        title.setText(i.getStringExtra("workerTitle"));
+
 
         int[] toViews = {R.id.topic, R.id.timeStamp, R.id.message};
         String[] fromColumns = {"playerid", "playername"}; // change this

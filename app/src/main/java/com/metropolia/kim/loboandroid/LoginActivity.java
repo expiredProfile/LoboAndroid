@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by kimmo on 02/05/2016.
@@ -29,7 +30,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = login.getText().toString();
-                startActivity(intent);
+                if (name == ""){
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please insert your username",Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+                    LoginTask lt = new LoginTask(LoginActivity.this);
+                    String[] params = {name};
+                    lt.execute(params);
+
+                }
+                //startActivity(intent);
             }
         });
     }

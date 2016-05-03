@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -22,12 +23,30 @@ public class ChatProvider extends ContentProvider {
     static final String URL = "content://" + PROVIDER_NAME;
     static final Uri CONTENT_URI = Uri.parse(URL);
 
+    private static final int CONVERSATIONS_NAME = 1;
+    private static final int CONVERSATION_ID = 2;
+    private static final int MESSAGES_BY_ID = 3;
+    private static final int MESSAGES_LATEST_ID = 4;
+    private static final int ALL_WORKERS = 5;
+
+    private static final int INSERT_WORKER = 6;
+    private static final int INSERT_CONVERSATION = 7;
+    private static final int INSERT_MESSAGE = 8;
+
+
     static final UriMatcher uriMatcher;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        //uriMatcher.addURI(PROVIDER_NAME, "players", PLAYERS);
-        //uriMatcher.addURI(PROVIDER_NAME, "players/#", PLAYER_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "conversations_name",CONVERSATIONS_NAME);
+        uriMatcher.addURI(PROVIDER_NAME, "conversations_id",CONVERSATION_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "messages_by_id",MESSAGES_BY_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "messages_latest_id",MESSAGES_LATEST_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "workers",ALL_WORKERS);
+
+        uriMatcher.addURI(PROVIDER_NAME,"insert_worker",INSERT_WORKER);
+        uriMatcher.addURI(PROVIDER_NAME,"insert_conversation",INSERT_CONVERSATION);
+        uriMatcher.addURI(PROVIDER_NAME,"insert_message",INSERT_MESSAGE);
     }
 
     private SQLiteDatabase database;
@@ -38,22 +57,23 @@ public class ChatProvider extends ContentProvider {
     static final String ALERTS_TABLE_NAME = "alerts";
     static final int DATABASE_VERSION = 1;
     static final String CREATE_DB_TABLES =
-            " CREATE TABLE " + WORKERS_TABLE_NAME +
+            "CREATE TABLE " + WORKERS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " name TEXT NOT NULL, " +
                     " professionid TEXT NOT NULL," +
-                    " title TEXT NOT NULL)"
+                    " title TEXT NOT NULL,"+
+                    " workerid INTEGER UNIQUE NOT NULL);"
 
                     + "CREATE TABLE " + MESSAGES_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " content TEXT NOT NULL, " +
                     " conversationid TEXT NOT NULL," +
                     " postname TEXT NOT NULL,"
-                    + "shorttimestamp TEXT NOT NULL)"
+                    + " shorttimestamp TEXT NOT NULL);"
 
                     + "CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY, " +
-                    " topic TEXT NOT NULL)"
+                    " topic TEXT NOT NULL);"
 
                     + "CREATE TABLE " + ALERTS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY, " +
@@ -61,7 +81,7 @@ public class ChatProvider extends ContentProvider {
                     " currenttime TEXT NOT NULL," +
                     " category INTEGER NOT NULL," +
                     " postname TEXT NOT NULL," +
-                    " receivergroup INTEGER NOT NULL)";
+                    " receivergroup INTEGER NOT NULL);";
 
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -94,7 +114,30 @@ public class ChatProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Cursor c = database.query("workers", projection, selection, selectionArgs, null, null, sortOrder);
+        int match = uriMatcher.match(uri);
+        Cursor c = null;
+        switch(match){
+            case CONVERSATIONS_NAME:
+                c = database.query("conversations", projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CONVERSATION_ID:
+                c = database.query("conversations", projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case MESSAGES_BY_ID:
+                c = database.query("messages", projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case MESSAGES_LATEST_ID:
+                c = database.query("messages", projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case ALL_WORKERS:
+                c = database.query("workers", projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            default:
+                Log.d("oma", "Invalid uri");
+                break;
+        }
+
+
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
@@ -108,7 +151,19 @@ public class ChatProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        database.insert("workers", null, values);
+        int match = uriMatcher.match(uri);
+
+        switch(match){
+            case INSERT_WORKER:
+                database.insertWithOnConflict("workers", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                break;
+            case INSERT_CONVERSATION:
+                database.insertWithOnConflict("conversations", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                break;
+            case INSERT_MESSAGE:
+                database.insertWithOnConflict("messages", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                break;
+        }
         getContext().getContentResolver().notifyChange(uri, null);
         return uri;
     }
