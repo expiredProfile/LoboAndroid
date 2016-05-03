@@ -146,7 +146,7 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
                     if (message.equals(conversationid)){
                         Log.d("oma","HAE VIESTIT"+message);
                         NetworkingTask msgs = new NetworkingTask(ConversationActivity.this);
-                        String[] params = {"resources/Messages/" + conversationid, "message"};
+                        String[] params = {"resources/Conversations/conversationID/" + conversationid, "message"};
                         msgs.register(ConversationActivity.this);
                         msgs.execute(params);
                     }

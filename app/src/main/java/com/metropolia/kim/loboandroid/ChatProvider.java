@@ -218,6 +218,7 @@ public class ChatProvider extends ContentProvider {
             case FLUSH_MESSAGES:
                 Log.d("oma","Messages del");
                 database.delete("messages",null,null);
+                break;
             default:
                 Log.d("oma","Provider delete fail");
                 break;

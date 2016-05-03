@@ -20,7 +20,7 @@ public class Message {
         this.conversationID = id;
         this.currentTime = currentTime;
         this.shortTimeStamp = shortTime;
-        this.setMessageID(messageID);
+        this.messageID = messageID;
     }
 
     public String getContent() {

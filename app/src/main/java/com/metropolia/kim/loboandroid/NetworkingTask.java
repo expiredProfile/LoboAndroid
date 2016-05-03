@@ -105,6 +105,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         values.put("conversationid",m.getConversationID());
                         values.put("postname",m.getPostName());
                         values.put("shorttimestamp",m.getShortTime());
+                        //Log.d("oma",m.getShortTime());
                         values.put("messageid",m.getMessageID());
                         Uri uri = Uri.parse(ChatProvider.URL+"/messages/insert");
                         this.context.getContentResolver().insert(uri, values);
