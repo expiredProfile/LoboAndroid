@@ -18,8 +18,10 @@ import java.util.List;
  */
 public class LoginTask extends AsyncTask<String, String, Boolean> {
     private Context context;
-   // private String baseurl = "http://192.168.43.109:8080/LoboChat/";
-    private String baseurl = "http://10.0.2.2:8080/LoboChat/";
+    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; // henkka
+    private String baseurl = "http://192.168.43.9:8080/LoboChat/"; // kim
+    //private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
+
     private String wname = "";
     private String wtitle = "";
 

@@ -6,9 +6,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.metropolia.kim.loboandroiddata.Alert;
 import com.metropolia.kim.loboandroiddata.Conversation;
+import com.metropolia.kim.loboandroiddata.Message;
 import com.metropolia.kim.loboandroiddata.Worker;
+import com.metropolia.kim.xmlparser.AlertXmlParser;
 import com.metropolia.kim.xmlparser.ConversationXmlParser;
+import com.metropolia.kim.xmlparser.MessageXmlParser;
 import com.metropolia.kim.xmlparser.WorkerXmlParser;
 
 import java.io.InputStream;
@@ -21,9 +25,9 @@ import java.util.List;
 public class NetworkingTask extends AsyncTask<String, String, String> {
     private HttpURLConnection httpURLConnection;
 
-    private String TommiBseurl = "http://10.0.2.2:8080/LoboChat/";
-    private String kimBaseurl = "http://192.168.43.9:8080/LoboChat/";
-    private String henkkaBaseurl = "http://192.168.43.109:8080/LoboChat/";
+    private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
+    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
+    //private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
 
     private Context context;
     public NetworkingTask(Context context) {
@@ -36,7 +40,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
         String endurl = params[0];
         String dataType = params[1];
         try {
-            URL url = new URL(kimBaseurl + endurl);
+            URL url = new URL(baseurl + endurl);
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(20000);
             httpURLConnection.setReadTimeout(20000);
@@ -53,6 +57,17 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                     List<Conversation> conversations = xmlParser.parse(is);
 
                 case "message":
+                    MessageXmlParser messsageParser = new MessageXmlParser();
+                    List<Message> messages = messsageParser.parse(is);
+                    for(Message m : messages){
+                        ContentValues values = new ContentValues();
+                        values.put("content", m.getContent());
+                        values.put("conversationid", m.getConversationID());
+                        values.put("postname", m.getPostName());
+                        values.put("shorttimestamp", m.getShortTime());
+                        Uri uri = Uri.parse(ChatProvider.URL+"messages/insert");
+                        this.context.getContentResolver().insert(uri, values);
+                    }
 
                 case "worker":
                     WorkerXmlParser workerParser = new WorkerXmlParser();
@@ -67,15 +82,25 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         } else {
                             values.put("title", w.getTitle());
                         }
-                        values.put("title", w.getTitle());
                         values.put("workerid", w.getId());
-                        values.put("title", w.getTitle());
-                        values.put("workerid", w.getId());
-                        Uri uri = Uri.parse(ChatProvider.URL+"/workers/insert");
+                        Uri uri = Uri.parse(ChatProvider.URL + "/workers/insert");
                         this.context.getContentResolver().insert(uri, values);
 
                     }
                 case "alert":
+                    AlertXmlParser alertParser = new AlertXmlParser();
+                    List<Alert> alerts = alertParser.parse(is);
+                    for (Alert a : alerts) {
+                        ContentValues values = new ContentValues();
+
+                        values.put("topic", a.getAlertTopic());
+                        values.put("currenttime", a.getCurrentTime());
+                        values.put("category", a.getAlertCat());
+                        values.put("postname", a.getPostName());
+                        values.put("receivergroup", a.getReceiverGroup());
+                        Uri uri = Uri.parse(ChatProvider.URL + "/alerts/insert");
+                        this.context.getContentResolver().insert(uri, values);
+                    }
             }
 
         } catch (Exception e) {
