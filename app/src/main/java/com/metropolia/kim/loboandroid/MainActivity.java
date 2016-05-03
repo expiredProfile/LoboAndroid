@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
+        implements Obsrvr, NavigationView.OnNavigationItemSelectedListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
     private Intent alertIntent;
     private Intent usersIntent;
@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity
         if (first) {
             NetworkingTask nt = new NetworkingTask(this);
             String[] params = {"resources/Conversations/" + workerName, "conversation"};
+            nt.register(this);
             nt.execute(params);
         }
         fillData();
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("oma", "onResume else");
         NetworkingTask nt = new NetworkingTask(this);
         String[] params = {"resources/Conversations/" + workerName, "conversation"};
+        nt.register(this);
         nt.execute(params);
 
 
@@ -207,5 +209,10 @@ public class MainActivity extends AppCompatActivity
     public void onLoaderReset(android.content.Loader<Cursor> loader) {
         Log.d(MYNAME, "onLoaderReset()");
         myAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void update() {
+        getLoaderManager().restartLoader(0,null, this);
     }
 }

@@ -9,16 +9,18 @@ public class Message {
     private int conversationID;
     private String currentTime;
     private String shortTimeStamp;
+    private int messageID;
 
     public Message() {
     }
 
-    public Message(String content, String name, int id, String currentTime, String shortTime) {
+    public Message(String content, String name, int id, String currentTime, String shortTime, int messageID) {
         this.content = content;
         this.postName = name;
         this.conversationID = id;
         this.currentTime = currentTime;
         this.shortTimeStamp = shortTime;
+        this.setMessageID(messageID);
     }
 
     public String getContent() {
@@ -39,5 +41,13 @@ public class Message {
 
     public String getShortTime() {
         return this.shortTimeStamp;
+    }
+
+    public int getMessageID() {
+        return messageID;
+    }
+
+    public void setMessageID(int messageID) {
+        this.messageID = messageID;
     }
 }
