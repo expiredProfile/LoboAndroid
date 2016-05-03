@@ -8,9 +8,11 @@ import android.util.Log;
 
 import com.metropolia.kim.loboandroiddata.Alert;
 import com.metropolia.kim.loboandroiddata.Conversation;
+import com.metropolia.kim.loboandroiddata.Message;
 import com.metropolia.kim.loboandroiddata.Worker;
 import com.metropolia.kim.xmlparser.AlertXmlParser;
 import com.metropolia.kim.xmlparser.ConversationXmlParser;
+import com.metropolia.kim.xmlparser.MessageXmlParser;
 import com.metropolia.kim.xmlparser.WorkerXmlParser;
 
 import java.io.InputStream;
@@ -22,8 +24,8 @@ import java.util.List;
 
 public class NetworkingTask extends AsyncTask<String, String, String> {
     private HttpURLConnection httpURLConnection;
-   // private String baseurl = "http://192.168.43.9:8080/LoboChat/"; //Kim
-    private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
+    private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
+    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
     private Context context;
     public NetworkingTask(Context context) {
         this.context = context;
@@ -52,6 +54,17 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                     List<Conversation> conversations = xmlParser.parse(is);
 
                 case "message":
+                    MessageXmlParser messsageParser = new MessageXmlParser();
+                    List<Message> messages = messsageParser.parse(is);
+                    for(Message m : messages){
+                        ContentValues values = new ContentValues();
+                        values.put("content", m.getContent());
+                        values.put("conversationid", m.getConversationID());
+                        values.put("postname", m.getPostName());
+                        values.put("shorttimestamp", m.getShortTime());
+                        Uri uri = Uri.parse(ChatProvider.URL+"messages/insert");
+                        this.context.getContentResolver().insert(uri, values);
+                    }
 
                 case "worker":
                     WorkerXmlParser workerParser = new WorkerXmlParser();
