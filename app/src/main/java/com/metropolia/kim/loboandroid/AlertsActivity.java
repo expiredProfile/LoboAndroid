@@ -121,7 +121,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
                 break;
         }
 
-        String[] params = {"resources/Alerts", "alert"};
+        String[] params = {"resources/Alerthistory/" + range, "alert"};
         NetworkingTask networkTask = new NetworkingTask(this);
         networkTask.execute(params);
         fillData();
