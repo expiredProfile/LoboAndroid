@@ -19,7 +19,8 @@ import java.util.List;
 
 public class NetworkingTask extends AsyncTask<String, String, String> {
     private HttpURLConnection httpURLConnection;
-    private String baseurl = "http://192.168.43.109:8080/LoboChat/";
+    //private String baseurl = "http://192.168.43.109:8080/LoboChat/";
+    private String baseurl = "http://10.0.2.2:8080/LoboChat/";
     private Context context;
 
     public NetworkingTask(Context context) {

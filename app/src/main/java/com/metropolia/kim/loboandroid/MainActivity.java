@@ -62,10 +62,10 @@ public class MainActivity extends AppCompatActivity
         TextView username = (TextView)findViewById(R.id.textUsername);
         TextView title = (TextView)findViewById(R.id.textProfession);
         Intent i = getIntent();
-        workerName = i.getStringExtra("workerName");
+       /* workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
         username.setText(i.getStringExtra("workerName"));
-        title.setText(i.getStringExtra("workerTitle"));
+        title.setText(i.getStringExtra("workerTitle"));*/
 
 
         int[] toViews = {R.id.topic, R.id.timeStamp, R.id.message};
