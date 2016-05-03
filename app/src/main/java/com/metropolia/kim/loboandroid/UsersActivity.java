@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -70,6 +71,7 @@ public class UsersActivity extends AppCompatActivity implements android.app.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d("oma","onCreateLoader()");
         String[] projection = {"_id", "name", "title"};
         Uri uri = Uri.parse(ChatProvider.URL + "/workers");
         return new CursorLoader(this, uri, projection, null, null, null);
@@ -77,6 +79,7 @@ public class UsersActivity extends AppCompatActivity implements android.app.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d("oma","onCreateLoader()");
         adapter.swapCursor(data);
     }
 
