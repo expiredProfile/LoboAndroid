@@ -15,8 +15,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CreateConversationActivity.class);
-                intent.putExtra("workerName",workerName);
+                intent.putExtra("workerName", workerName);
                 startActivity(intent);
             }
         });
@@ -59,13 +61,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
         //TextView username = (TextView)findViewById(R.id.textUsername);
         //TextView title = (TextView)findViewById(R.id.textProfession);
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
-        lv = (ListView)findViewById(R.id.myListView);
+        lv = (ListView) findViewById(R.id.myListView);
 
         if (first) {
             NetworkingTask nt = new NetworkingTask(this);
@@ -73,6 +74,19 @@ public class MainActivity extends AppCompatActivity
             nt.execute(params);
         }
         fillData();
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView conversationid = (TextView) view.findViewById(R.id.cid);
+                TextView topic = (TextView) view.findViewById(R.id.topic);
+                Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
+                intent.putExtra("conversationid", conversationid.getText().toString());
+                intent.putExtra("topic", topic.getText().toString());
+                intent.putExtra("workerName", workerName);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -91,14 +105,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (first){
-            first = false;
-        } else {
-            Log.d("oma","onResume else");
-            NetworkingTask nt = new NetworkingTask(this);
-            String[] params = {"resources/Conversations/"+workerName,"conversation"};
-            nt.execute(params);
-        }
+        Log.d("oma", "onResume else");
+        NetworkingTask nt = new NetworkingTask(this);
+        String[] params = {"resources/Conversations/" + workerName, "conversation"};
+        nt.execute(params);
+
 
     }
     /*@Override
@@ -128,7 +139,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         alertIntent = new Intent(this, AlertsActivity.class);
         usersIntent = new Intent(this, UsersActivity.class);
-        usersIntent.putExtra("workerName",workerName);
+        usersIntent.putExtra("workerName", workerName);
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -146,8 +157,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void fillData() {
-        String[] fromColumns = {"conversationid","topic","lastmessage"}; // from which COLUMNS
-        int[] toViews = {R.id.cid,R.id.topic,R.id.message}; // TO which VIEWS
+        String[] fromColumns = {"conversationid", "topic", "lastmessage"}; // from which COLUMNS
+        int[] toViews = {R.id.cid, R.id.topic, R.id.message}; // TO which VIEWS
 
         // initializing the CursorLoader
         getLoaderManager().initLoader(0, null, this);
@@ -159,9 +170,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d("oma","onCreateLoader()");
+        Log.d("oma", "onCreateLoader()");
         String[] projection = {"_id", "conversationid", "topic", "lastmessage", "workername"};
-        String selection = "workername = '"+workerName+"'";
+        String selection = "workername = '" + workerName + "'";
         Uri uri = Uri.parse(ChatProvider.URL + "/conversations/name");
         return new CursorLoader(this, uri, projection, selection, null, null);
     }
