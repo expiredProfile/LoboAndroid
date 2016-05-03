@@ -7,4 +7,16 @@
     <string name="action_settings">Settings</string>
     <string name="username">UsernameHere</string>
     <string name="profession">ProfessionHere</string>
+
+    <string name="alertCat">Choose alert category</string>
+    <string name="alertReceiverGroup">Choose receiver group</string>
+    <string name="sendAlertBtn">Send alert</string>
+
+    <string name="catRadio1">Need assistance</string>
+    <string name="catRadio2">Disturbance</string>
+    <string name="catRadio3">Fire alert</string>
+
+    <string name="recRadio1">Guards</string>
+    <string name="recRadio2">Doctors</string>
+    <string name="recRadio3">All</string>
 </resources>

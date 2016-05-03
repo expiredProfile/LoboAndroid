@@ -67,7 +67,7 @@ public class AlertXmlParser {
     }
 
     private Alert readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, ns, "player");
+        parser.require(XmlPullParser.START_TAG, ns, "alert");
         int id = 0;
         String currentTime = null;
         int alertCat = 0;
