@@ -70,12 +70,18 @@ public class PostTask extends AsyncTask<String, String, String> {
                     int responseCode = httpURLConnection.getResponseCode();
                     Log.d("kek", "response: " + responseCode);
                     os.close();
-
+                    break;
                 case "message":
-
-
+                    break;
                 case "alert":
+                    bufferedWriter.write(xml);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
 
+                    int alertResponseCode = httpURLConnection.getResponseCode();
+                    Log.d("POST", "alert post response: " + alertResponseCode);
+                    os.close();
+                    break;
             }
 
         } catch (Exception e) {

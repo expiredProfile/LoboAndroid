@@ -1,17 +1,15 @@
 package com.metropolia.kim.loboandroid;
 
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
@@ -26,6 +24,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
     private ListView alertHistoryView;
     private SimpleCursorAdapter adapter;
 
+    private String workerName;
     private int range = -1;
 
     @Override
@@ -42,6 +41,9 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
         recRadioGroup = (RadioGroup) findViewById(R.id.recRadioGroup);
         hisRadioGroup = (RadioGroup) findViewById(R.id.hisRadioGroup);
         alertHistoryView = (ListView) findViewById(R.id.alertHistoryView);
+
+        Intent i = getIntent();
+        workerName = i.getStringExtra("workerName");
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -55,23 +57,49 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
     public void sendAlert () {
         //Get input
-        int alertCat = catRadioGroup.getCheckedRadioButtonId();
-        int alertRec = recRadioGroup.getCheckedRadioButtonId();
+        int alertCatInput = catRadioGroup.getCheckedRadioButtonId();
+        int alertCat = -1;
 
-        //POST?
+        switch (alertCatInput) {
+            case R.id.catRadio1: //Need assistance
+                alertCat = 0;
+                break;
+            case R.id.catRadio2: //Disturbance
+                alertCat = 1;
+                break;
+            case R.id.catRadio3: //Fire alert
+                alertCat = 2;
+                break;
+            default:
+                Log.d("ALERT", "Invalid alertCat -1");
+                break;
+        }
 
-        //String[] params = {"resources/Alerts/?", "alert"};
-        //NetworkingTask networkTask = new NetworkingTask(this);
-        //networkTask.execute(params);
+        int alertRecInput = recRadioGroup.getCheckedRadioButtonId();
+        int alertRec = -1;
 
-        /*
-        Alert columns:
-            " topic TEXT NOT NULL, " +
-            " currenttime TEXT NOT NULL," +
-            " category INTEGER NOT NULL," +
-            " postname TEXT NOT NULL," +
-            " receivergroup INTEGER NOT NULL);"
-         */
+        switch (alertRecInput) {
+            case R.id.recRadio1: //All
+                alertRec = 0;
+                break;
+            case R.id.recRadio2: //Guards
+                alertRec = 1;
+                break;
+            case R.id.recRadio3: //Doctors
+                alertRec = 2;
+                break;
+            default:
+                Log.d("ALERT", "Invalid alertRec -1");
+                break;
+        }
+
+        String alertXml = "<alert><alertCat>" + alertCat + "</alertCat>" +
+                "<receiverGroup>" + alertRec + "</receiverGroup>" +
+                "<postName>" + workerName + "</postName></alert>";
+
+        String[] params = {"resources/Alerts", "alert", alertXml};
+        PostTask postTask = new PostTask(this);
+        postTask.execute(params);
     }
 
     public void getAlertHistory () {

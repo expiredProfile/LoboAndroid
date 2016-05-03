@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         alertIntent = new Intent(this, AlertsActivity.class);
+        alertIntent.putExtra("workerName",workerName);
         usersIntent = new Intent(this, UsersActivity.class);
         usersIntent.putExtra("workerName",workerName);
         // Handle navigation view item clicks here.
