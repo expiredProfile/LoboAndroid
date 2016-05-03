@@ -74,6 +74,7 @@ public class AlertXmlParser {
         String alertTopic = null;
         int receiverGroup = 0;
         String postName = null;
+        String postTitle = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -91,17 +92,26 @@ public class AlertXmlParser {
                 alertTopic = readAlertTopic(parser);
             } else if (xmlName.equals("postName")) {
                 postName = readPostName(parser);
+            } else if (xmlName.equals("postTitle")) {
+                postTitle = readPostTitle(parser);
             } else {
                 skip(parser);
             }
         }
-        return new Alert(id, currentTime, alertCat, alertTopic, receiverGroup, postName);
+        return new Alert(id, currentTime, alertCat, alertTopic, receiverGroup, postName, postTitle);
     }
 
     private String readPostName(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "postName");
         String title = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "postName");
+        return title;
+    }
+
+    private String readPostTitle(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "postTitle");
+        String title = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "postTitle");
         return title;
     }
 

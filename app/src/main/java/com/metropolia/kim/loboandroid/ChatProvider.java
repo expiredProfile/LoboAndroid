@@ -39,6 +39,9 @@ public class ChatProvider extends ContentProvider {
     private static final int INSERT_MEMBER = 11;
     private static final int FLUSH_MEMBER = 12;
 
+    private static final int FLUSH_ALERTS = 13;
+    private static final int ALERTS_BY_ID = 14;
+
 
     static final UriMatcher uriMatcher;
 
@@ -55,10 +58,13 @@ public class ChatProvider extends ContentProvider {
         uriMatcher.addURI(PROVIDER_NAME,"messages/insert",INSERT_MESSAGE);
 
         uriMatcher.addURI(PROVIDER_NAME,"alerts/insert",INSERT_ALERT);
-        uriMatcher.addURI(PROVIDER_NAME,"alerts/range/#",ALERTS_HISTORY);
+        uriMatcher.addURI(PROVIDER_NAME,"alerts",ALERTS_HISTORY);
 
         uriMatcher.addURI(PROVIDER_NAME,"/members/insert",INSERT_MEMBER);
         uriMatcher.addURI(PROVIDER_NAME,"/members/flush",FLUSH_MEMBER);
+
+        uriMatcher.addURI(PROVIDER_NAME,"/alerts/flush",FLUSH_ALERTS);
+        uriMatcher.addURI(PROVIDER_NAME, "alerts/id/#",ALERTS_BY_ID);
     }
 
     private SQLiteDatabase database;
@@ -98,6 +104,7 @@ public class ChatProvider extends ContentProvider {
             " currenttime TEXT NOT NULL," +
             " category INTEGER NOT NULL," +
             " postname TEXT NOT NULL," +
+            " posttitle TEXT NOT NULL," +
             " receivergroup INTEGER NOT NULL);";
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -158,6 +165,10 @@ public class ChatProvider extends ContentProvider {
                 c = database.query("alerts", projection, selection, selectionArgs, null, null, sortOrder);
                 Log.d("oma","alert history query()");
                 break;
+            case ALERTS_BY_ID:
+                c = database.query("alerts", projection, selection, selectionArgs, null, null, sortOrder);
+                Log.d("oma","alert history query()");
+                break;
             default:
                 Log.d("oma", "Invalid uri");
                 break;
@@ -208,8 +219,12 @@ public class ChatProvider extends ContentProvider {
         int match = uriMatcher.match(uri);
         switch (match){
             case FLUSH_MEMBER:
-                Log.d("oma","Provider delete");
+                Log.d("oma","Provider delete members");
                 database.delete("members",null,null);
+                break;
+            case FLUSH_ALERTS:
+                Log.d("oma","Provider delete alerts");
+                database.delete("alerts",null,null);
                 break;
             default:
                 Log.d("oma","Provider delete fail");

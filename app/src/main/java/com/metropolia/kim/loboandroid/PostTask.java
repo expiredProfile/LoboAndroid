@@ -87,8 +87,8 @@ public class PostTask extends AsyncTask<String, String, String> {
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                         int newAlertId = Integer.parseInt(bufferedReader.readLine());
                         Log.d("ALERT POST", "Server returned alert id: " + newAlertId);
-                        //get alert by ID for notification etc
                         is.close();
+                        //get alert by ID for notification etc
                     } catch (Exception e) {
                         Log.d("ALERT POST", "Exception in inputStream: " + e);
                     }

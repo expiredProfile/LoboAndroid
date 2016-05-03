@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     private String workerTitle;
     private ListView lv;
     private boolean first = true;
+
+    Intent serviceIntent;
 
 
     @Override
@@ -99,6 +102,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Start service
+        serviceIntent = new Intent(this, NotificationService.class);
+        startService(serviceIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "NotificationService stopping", Toast.LENGTH_SHORT).show();
+        stopService(serviceIntent);
+    }
 
     //creates the three dots on the up right of the tool bar
 
@@ -139,6 +156,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         alertIntent = new Intent(this, AlertsActivity.class);
         alertIntent.putExtra("workerName",workerName);
+        alertIntent.putExtra("workerTitle",workerTitle);
+
         usersIntent = new Intent(this, UsersActivity.class);
         usersIntent.putExtra("workerName", workerName);
         // Handle navigation view item clicks here.
