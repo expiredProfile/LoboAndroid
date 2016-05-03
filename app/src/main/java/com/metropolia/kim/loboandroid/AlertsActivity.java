@@ -143,8 +143,9 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d("ALERT","onCreateLoader()");
         String[] projection = {"_id", "topic", "postname", "currenttime", "receivergroup"};
+        String selectionArgs = "";
         Uri uri = Uri.parse(ChatProvider.URL + "alerts/range/" + range); //RANGE HERE
-        return new CursorLoader(this, uri, projection, null, null, null);
+        return new CursorLoader(this, uri, projection, selectionArgs, null, null);
     }
 
     @Override
