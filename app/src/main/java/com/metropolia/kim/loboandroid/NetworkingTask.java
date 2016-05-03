@@ -120,7 +120,9 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
 
                     }
                     break;
+
                 case "alert":
+                    /*
                     AlertXmlParser alertParser = new AlertXmlParser();
                     List<Alert> alerts = alertParser.parse(is);
                     for (Alert a : alerts) {
@@ -134,6 +136,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         Uri uri = Uri.parse(ChatProvider.URL + "/alerts/insert");
                         this.context.getContentResolver().insert(uri, values);
                     }
+                    */
                     break;
             }
             is.close();

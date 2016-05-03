@@ -16,9 +16,9 @@
     <string name="catRadio2">Disturbance</string>
     <string name="catRadio3">Fire alert</string>
 
-    <string name="recRadio1">Guards</string>
-    <string name="recRadio2">Doctors</string>
-    <string name="recRadio3">All</string>
+    <string name="recRadio1">All</string>
+    <string name="recRadio2">Guards</string>
+    <string name="recRadio3">Doctors</string>
 
     <string name="alertHistory">Alert history, choose range</string>
     <string name="alertHistoryBtn">Get alerts</string>

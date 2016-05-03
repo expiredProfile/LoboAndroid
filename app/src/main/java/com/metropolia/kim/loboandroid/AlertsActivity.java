@@ -1,17 +1,15 @@
 package com.metropolia.kim.loboandroid;
 
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
@@ -20,14 +18,14 @@ import android.widget.SimpleCursorAdapter;
  * Created by kimmo on 27/04/2016.
  */
 public class AlertsActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
-    RadioGroup catRadioGroup;
-    RadioGroup recRadioGroup;
-    RadioGroup hisRadioGroup;
-    ListView alertHistoryView;
-
-    int range = -1;
-
+    private RadioGroup catRadioGroup;
+    private RadioGroup recRadioGroup;
+    private RadioGroup hisRadioGroup;
+    private ListView alertHistoryView;
     private SimpleCursorAdapter adapter;
+
+    private String workerName;
+    private int range = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +41,9 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
         recRadioGroup = (RadioGroup) findViewById(R.id.recRadioGroup);
         hisRadioGroup = (RadioGroup) findViewById(R.id.hisRadioGroup);
         alertHistoryView = (ListView) findViewById(R.id.alertHistoryView);
+
+        Intent i = getIntent();
+        workerName = i.getStringExtra("workerName");
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -56,8 +57,49 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
     public void sendAlert () {
         //Get input
-        int alertCat = catRadioGroup.getCheckedRadioButtonId();
-        int alertRec = recRadioGroup.getCheckedRadioButtonId();
+        int alertCatInput = catRadioGroup.getCheckedRadioButtonId();
+        int alertCat = -1;
+
+        switch (alertCatInput) {
+            case R.id.catRadio1: //Need assistance
+                alertCat = 0;
+                break;
+            case R.id.catRadio2: //Disturbance
+                alertCat = 1;
+                break;
+            case R.id.catRadio3: //Fire alert
+                alertCat = 2;
+                break;
+            default:
+                Log.d("ALERT", "Invalid alertCat -1");
+                break;
+        }
+
+        int alertRecInput = recRadioGroup.getCheckedRadioButtonId();
+        int alertRec = -1;
+
+        switch (alertRecInput) {
+            case R.id.recRadio1: //All
+                alertRec = 0;
+                break;
+            case R.id.recRadio2: //Guards
+                alertRec = 1;
+                break;
+            case R.id.recRadio3: //Doctors
+                alertRec = 2;
+                break;
+            default:
+                Log.d("ALERT", "Invalid alertRec -1");
+                break;
+        }
+
+        String alertXml = "<alert><alertCat>" + alertCat + "</alertCat>" +
+                "<receiverGroup>" + alertRec + "</receiverGroup>" +
+                "<postName>" + workerName + "</postName></alert>";
+
+        String[] params = {"resources/Alerts", "alert", alertXml};
+        PostTask postTask = new PostTask(this);
+        postTask.execute(params);
     }
 
     public void getAlertHistory () {
@@ -66,20 +108,20 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
         switch (rangeInput) {
             case R.id.hisRadio1: //5
-                range = 5;
+                range = 0;
                 break;
             case R.id.hisRadio2: //10
-                range = 10;
+                range = 1;
                 break;
             case R.id.hisRadio3: //All
-                range = 0;
+                range = 2;
                 break;
             default:
                 Log.d("ALERT", "Invalid history range -1");
                 break;
         }
 
-        String[] params = {"resources/Alerts", "alert"};
+        String[] params = {"resources/Alerthistory/" + range, "alert"};
         NetworkingTask networkTask = new NetworkingTask(this);
         networkTask.execute(params);
         fillData();
