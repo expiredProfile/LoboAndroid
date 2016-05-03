@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CreateConversationActivity.class);
+                intent.putExtra("workerName",workerName);
                 startActivity(intent);
             }
         });
@@ -59,15 +60,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        TextView username = (TextView)findViewById(R.id.textUsername);
-        TextView title = (TextView)findViewById(R.id.textProfession);
+        //TextView username = (TextView)findViewById(R.id.textUsername);
+        //TextView title = (TextView)findViewById(R.id.textProfession);
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
-        username.setText(i.getStringExtra("workerName"));
-        title.setText(i.getStringExtra("workerTitle"));
+        //username.setText(i.getStringExtra("workerName"));
+        //title.setText(i.getStringExtra("workerTitle"));
 
-
+        Log.d("oma", "wNAme:"+workerName+" wTitle:"+workerTitle);
         int[] toViews = {R.id.topic, R.id.timeStamp, R.id.message};
         String[] fromColumns = {"playerid", "playername"}; // change this
         myAdapter = new SimpleCursorAdapter(this, R.layout.conversation_list_item,

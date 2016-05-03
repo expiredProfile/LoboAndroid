@@ -38,15 +38,15 @@ public class ChatProvider extends ContentProvider {
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "conversations_name",CONVERSATIONS_NAME);
-        uriMatcher.addURI(PROVIDER_NAME, "conversations_id",CONVERSATION_ID);
-        uriMatcher.addURI(PROVIDER_NAME, "messages_by_id",MESSAGES_BY_ID);
-        uriMatcher.addURI(PROVIDER_NAME, "messages_latest_id",MESSAGES_LATEST_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "conversations/name/#",CONVERSATIONS_NAME);
+        uriMatcher.addURI(PROVIDER_NAME, "conversations/id/#",CONVERSATION_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "messages/#",MESSAGES_BY_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "messages/latest/#",MESSAGES_LATEST_ID);
         uriMatcher.addURI(PROVIDER_NAME, "workers",ALL_WORKERS);
 
-        uriMatcher.addURI(PROVIDER_NAME,"insert_worker",INSERT_WORKER);
-        uriMatcher.addURI(PROVIDER_NAME,"insert_conversation",INSERT_CONVERSATION);
-        uriMatcher.addURI(PROVIDER_NAME,"insert_message",INSERT_MESSAGE);
+        uriMatcher.addURI(PROVIDER_NAME,"workers/insert",INSERT_WORKER);
+        uriMatcher.addURI(PROVIDER_NAME,"conversations/insert",INSERT_CONVERSATION);
+        uriMatcher.addURI(PROVIDER_NAME,"messages/insert",INSERT_MESSAGE);
     }
 
     private SQLiteDatabase database;
@@ -140,6 +140,7 @@ public class ChatProvider extends ContentProvider {
                 break;
             case ALL_WORKERS:
                 c = database.query("workers", projection, selection, selectionArgs, null, null, sortOrder);
+                Log.d("oma","worker query()");
                 break;
             default:
                 Log.d("oma", "Invalid uri");
@@ -165,6 +166,7 @@ public class ChatProvider extends ContentProvider {
         switch(match){
             case INSERT_WORKER:
                 database.insertWithOnConflict("workers", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                Log.d("oma","insert worker()");
                 break;
             case INSERT_CONVERSATION:
                 database.insertWithOnConflict("conversations", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
@@ -172,6 +174,8 @@ public class ChatProvider extends ContentProvider {
             case INSERT_MESSAGE:
                 database.insertWithOnConflict("messages", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
                 break;
+            default:
+                Log.d("oma","Insert default");
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return uri;

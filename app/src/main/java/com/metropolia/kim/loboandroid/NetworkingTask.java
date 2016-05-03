@@ -2,6 +2,7 @@ package com.metropolia.kim.loboandroid;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -67,11 +68,8 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         values.put("workerid", w.getId());
                         values.put("title", w.getTitle());
                         values.put("workerid", w.getId());
-                        Log.d("TEST", w.getName());
-                        Log.d("TEST", w.getTitle());
-                        Log.d("TEST",".." +  w.getGroupID());
-
-                        this.context.getContentResolver().insert(ChatProvider.CONTENT_URI, values);
+                        Uri uri = Uri.parse(ChatProvider.URL+"/workers/insert");
+                        this.context.getContentResolver().insert(uri, values);
 
                     }
                 case "alert":
