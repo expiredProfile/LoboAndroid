@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity
         ListView lv = (ListView) findViewById(R.id.myListView);
         lv.setAdapter(myAdapter);
 
-
     }
 
     @Override

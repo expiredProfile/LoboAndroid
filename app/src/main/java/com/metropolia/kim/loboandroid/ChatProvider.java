@@ -65,8 +65,11 @@ public class ChatProvider extends ContentProvider {
                     " title TEXT NOT NULL,"+
                     " workerid INTEGER UNIQUE NOT NULL);"
 
-
                     + " CREATE TABLE " + MESSAGES_TABLE_NAME +
+                    " title TEXT NOT NULL,"+
+                    " workerid INTEGER UNIQUE NOT NULL);"
+
+                    + "CREATE TABLE " + MESSAGES_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " content TEXT NOT NULL, " +
                     " conversationid TEXT NOT NULL," +
@@ -77,7 +80,11 @@ public class ChatProvider extends ContentProvider {
                     " (_id INTEGER PRIMARY KEY, " +
                     " topic TEXT NOT NULL);"
 
-                    + " CREATE TABLE " + ALERTS_TABLE_NAME +
+                    + "CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
+                    " (_id INTEGER PRIMARY KEY, " +
+                    " topic TEXT NOT NULL);"
+
+                    + "CREATE TABLE " + ALERTS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY, " +
                     " topic TEXT NOT NULL, " +
                     " currenttime TEXT NOT NULL," +

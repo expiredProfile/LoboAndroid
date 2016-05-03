@@ -2,7 +2,6 @@ package com.metropolia.kim.loboandroid;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -24,7 +23,6 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
     private String henkkaBaseurl = "http://192.168.43.109:8080/LoboChat/";
     private Context context;
     public NetworkingTask(Context context) {
-
         this.context = context;
     }
 
@@ -35,7 +33,6 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
         String dataType = params[1];
         try {
             URL url = new URL(kimBaseurl + endurl);
-
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(20000);
             httpURLConnection.setReadTimeout(20000);
@@ -68,6 +65,11 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         }
                         values.put("title", w.getTitle());
                         values.put("workerid", w.getId());
+                        values.put("title", w.getTitle());
+                        values.put("workerid", w.getId());
+                        Log.d("TEST", w.getName());
+                        Log.d("TEST", w.getTitle());
+                        Log.d("TEST",".." +  w.getGroupID());
 
                         this.context.getContentResolver().insert(ChatProvider.CONTENT_URI, values);
 
