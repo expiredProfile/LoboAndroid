@@ -1,12 +1,19 @@
 package com.metropolia.kim.loboandroid;
 
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 import java.io.BufferedWriter;
 import java.io.OutputStream;
@@ -17,8 +24,11 @@ import java.net.URL;
 /**
  * Created by kimmo on 27/04/2016.
  */
-public class CreateConversationActivity extends AppCompatActivity {
+public class CreateConversationActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
     private String workerName;
+    private ListView lv;
+    private SimpleCursorAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +42,7 @@ public class CreateConversationActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
+        lv = (ListView) findViewById(R.id.myListView);
 
     }
 
@@ -46,6 +57,7 @@ public class CreateConversationActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.conversation_done:
                 // do something
+
                 return true;
             case android.R.id.home:
                 finish();
@@ -55,41 +67,34 @@ public class CreateConversationActivity extends AppCompatActivity {
         }
     }
 
-    // POST new user
-    private void postConversationObject() {
-        try {
-            URL url = new URL("http://10.0.2.2:8080/LoboChat/resources/Workers/Newuser");
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setReadTimeout(10000);
-            httpURLConnection.setConnectTimeout(15000);
+    private void fillData(){
+        String[] fromColumns = {"name"}; // from which COLUMNS
+        int[] toViews = {R.id.workerName, R.id.workerTitle}; // TO which VIEWS
 
-            httpURLConnection.setDoInput(true);
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("Content-Type", "application/xml");
+        // initializing the CursorLoader
+        getLoaderManager().initLoader(0, null, this);
 
+        // creating and binding binding adapter
+        this.adapter = new SimpleCursorAdapter(this, R.layout.users_list_item, null, fromColumns, toViews, 0);
+        lv.setAdapter(this.adapter);
+    }
 
-            OutputStream os = httpURLConnection.getOutputStream();
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d("oma","onCreateLoader()");
+        String[] projection = {"_id", "name"};
+        Uri uri = Uri.parse(ChatProvider.URL + "/workers");
+        return new CursorLoader(this, uri, projection, null, null, null);
+    }
 
-            String xmlObject = "<group>"
-                    + "<topic> </topic>"
-                    + "<workerList><id></id><name></name><title></title></workerList>"; // nykyinen käyttäjä
-            // loopilla loput käytäjät
-                   // + "</group>";
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
 
-            bufferedWriter.write(xmlObject);
-            bufferedWriter.flush();
-            bufferedWriter.close();
-
-            int responseCode = httpURLConnection.getResponseCode();
-            Log.d("kek", "response: " + responseCode);
-            os.close();
-
-            httpURLConnection.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
     }
 
 }
