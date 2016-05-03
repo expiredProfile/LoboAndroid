@@ -20,8 +20,8 @@ import java.util.List;
 
 public class NetworkingTask extends AsyncTask<String, String, String> {
     private HttpURLConnection httpURLConnection;
-    private String kimBaseurl = "http://192.168.43.9:8080/LoboChat/";
-    private String henkkaBaseurl = "http://192.168.43.109:8080/LoboChat/";
+   // private String baseurl = "http://192.168.43.9:8080/LoboChat/"; //Kim
+    private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
     private Context context;
     public NetworkingTask(Context context) {
         this.context = context;
@@ -33,7 +33,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
         String endurl = params[0];
         String dataType = params[1];
         try {
-            URL url = new URL(kimBaseurl + endurl);
+            URL url = new URL(baseurl + endurl);
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(20000);
             httpURLConnection.setReadTimeout(20000);

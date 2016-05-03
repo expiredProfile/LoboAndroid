@@ -12,8 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import java.util.ArrayList;
 
 /**
  * Created by kimmo on 27/04/2016.
@@ -22,7 +27,8 @@ public class CreateConversationActivity extends AppCompatActivity implements and
     private String workerName;
     private ListView lv;
     private SimpleCursorAdapter adapter;
-
+    private CheckedTextView ctv;
+    private ArrayList<String> selected = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,21 @@ public class CreateConversationActivity extends AppCompatActivity implements and
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
         lv = (ListView) findViewById(R.id.myListView);
+        fillData();
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ctv = (CheckedTextView)view.findViewById(R.id.checkName);
+                if (ctv.isChecked()){
+                    ctv.setChecked(false);
+                    selected.remove(ctv.getText().toString());
+                } else {
+                    ctv.setChecked(true);
+                    selected.add(ctv.getText().toString());
+                }
+            }
+        });
     }
 
     @Override
@@ -51,7 +71,11 @@ public class CreateConversationActivity extends AppCompatActivity implements and
         switch (item.getItemId()) {
             case R.id.conversation_done:
                 // do something
-
+                String s = "";
+                for (String ss : selected){
+                    s += ss;
+                }
+                Log.d("oma",s);
                 return true;
             case android.R.id.home:
                 finish();
@@ -63,13 +87,13 @@ public class CreateConversationActivity extends AppCompatActivity implements and
 
     private void fillData(){
         String[] fromColumns = {"name"}; // from which COLUMNS
-        int[] toViews = {R.id.workerName, R.id.workerTitle}; // TO which VIEWS
+        int[] toViews = {R.id.checkName}; // TO which VIEWS
 
         // initializing the CursorLoader
         getLoaderManager().initLoader(0, null, this);
 
         // creating and binding binding adapter
-        this.adapter = new SimpleCursorAdapter(this, R.layout.users_list_item, null, fromColumns, toViews, 0);
+        this.adapter = new SimpleCursorAdapter(this, R.layout.create_conversation_list_item, null, fromColumns, toViews, 0);
         lv.setAdapter(this.adapter);
     }
 
@@ -77,8 +101,9 @@ public class CreateConversationActivity extends AppCompatActivity implements and
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d("oma","onCreateLoader()");
         String[] projection = {"_id", "name"};
+        String selection = "name != '"+workerName+"'";
         Uri uri = Uri.parse(ChatProvider.URL + "/workers");
-        return new CursorLoader(this, uri, projection, null, null, null);
+        return new CursorLoader(this, uri, projection, selection, null, null);
     }
 
     @Override
