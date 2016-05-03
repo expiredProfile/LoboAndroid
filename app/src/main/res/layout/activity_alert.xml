@@ -89,4 +89,54 @@
         android:layout_alignParentLeft="true"
         android:onClick="sendAlert" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/alertHistory"
+        android:id="@+id/alertHistory"
+        android:layout_below="@+id/sendAlertBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10pt"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/hisRadioGroup"
+        android:layout_below="@+id/alertHistory">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hisRadio1"
+            android:id="@+id/hisRadio1" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hisRadio2"
+            android:id="@+id/hisRadio2" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hisRadio3"
+            android:id="@+id/hisRadio3" />
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/alertHistoryBtn"
+        android:id="@+id/alertHistoryBtn"
+        android:layout_below="@+id/hisRadioGroup"
+        android:onClick="getAlertHistory"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/alertHistoryView"
+        android:layout_below="@+id/alertHistoryBtn" />
+
 </RelativeLayout>
