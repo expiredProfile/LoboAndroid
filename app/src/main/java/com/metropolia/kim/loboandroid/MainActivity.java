@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity
         getLoaderManager().initLoader(0, null, this);
 
         // creating and binding binding adapter
-        this.myAdapter = new SimpleCursorAdapter(this, R.layout.conversation_list_item, null, fromColumns, toViews, 0);
+        this.myAdapter = new SimpleCursorAdapter(this, R.layout.list_item_conversation, null, fromColumns, toViews, 0);
         lv.setAdapter(this.myAdapter);
     }
 
