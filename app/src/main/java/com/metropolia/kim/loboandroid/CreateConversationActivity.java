@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -69,12 +70,24 @@ public class CreateConversationActivity extends AppCompatActivity implements and
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.conversation_done:
-                // do something
-                String s = "";
-                for (String ss : selected){
-                    s += ss;
+                EditText editText = (EditText) findViewById(R.id.editName);
+                String topic = editText.getText().toString();
+                if (topic.length() < 4) {
+                    return false;
                 }
-                Log.d("oma",s);
+                if (selected.isEmpty()) {
+                    return false;
+                }
+                Log.d("oma",workerName);
+                String workers = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + workerName + "</name><title></title></workerList>";
+                ;
+                for (String s : selected) {
+                    workers += "<workerList><id></id><name>" + s + "</name><title></title></workerList>";
+                }
+                workers += "</group>";
+                Log.d("oma", workers);
+                postConversation(workers);
+                finish();
                 return true;
             case android.R.id.home:
                 finish();
@@ -82,6 +95,12 @@ public class CreateConversationActivity extends AppCompatActivity implements and
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void postConversation(String xml){
+        PostTask postTask = new PostTask(this);
+        String[] params = {"resources/Conversations", "conversation", xml};
+        postTask.execute(params);
     }
 
     private void fillData(){

@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity
     SimpleCursorAdapter myAdapter;
     private String workerName;
     private String workerTitle;
+    private ListView lv;
+    private boolean first = true;
 
 
     @Override
@@ -56,25 +58,21 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
         //TextView username = (TextView)findViewById(R.id.textUsername);
         //TextView title = (TextView)findViewById(R.id.textProfession);
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
-        //username.setText(i.getStringExtra("workerName"));
-        //title.setText(i.getStringExtra("workerTitle"));
+        lv = (ListView)findViewById(R.id.myListView);
 
-        Log.d("oma", "wNAme:"+workerName+" wTitle:"+workerTitle);
-        int[] toViews = {R.id.topic, R.id.timeStamp, R.id.message};
-        String[] fromColumns = {"playerid", "playername"}; // change this
-        myAdapter = new SimpleCursorAdapter(this, R.layout.list_item_conversation,
-                null, fromColumns, toViews, 0);
-
-        //getLoaderManager().initLoader(0, null, this);
-
-        ListView lv = (ListView) findViewById(R.id.myListView);
-        lv.setAdapter(myAdapter);
-
+        if (first) {
+            NetworkingTask nt = new NetworkingTask(this);
+            String[] params = {"resources/Conversations/" + workerName, "conversation"};
+            nt.execute(params);
+        }
+        fillData();
     }
 
     @Override
@@ -89,6 +87,19 @@ public class MainActivity extends AppCompatActivity
 
 
     //creates the three dots on the up right of the tool bar
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (first){
+            first = false;
+        } else {
+            NetworkingTask nt = new NetworkingTask(this);
+            String[] params = {"resources/Conversations/"+workerName,"conversation"};
+            nt.execute(params);
+        }
+
+    }
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -116,6 +127,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         alertIntent = new Intent(this, AlertsActivity.class);
         usersIntent = new Intent(this, UsersActivity.class);
+        usersIntent.putExtra("workerName",workerName);
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -132,11 +144,25 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void fillData() {
+        String[] fromColumns = {"_id","topic"}; // from which COLUMNS
+        int[] toViews = {R.id.cid,R.id.topic}; // TO which VIEWS
+
+        // initializing the CursorLoader
+        getLoaderManager().initLoader(0, null, this);
+
+        // creating and binding binding adapter
+        this.myAdapter = new SimpleCursorAdapter(this, R.layout.conversation_list_item, null, fromColumns, toViews, 0);
+        lv.setAdapter(this.myAdapter);
+    }
+
     @Override
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d(MYNAME, "onCreateLoader()");
-        return new CursorLoader(this, Uri.parse("content://com.metropolia.kim.lab21/PlayerTable"),
-                null, null, null, null);
+        Log.d("oma","onCreateLoader()");
+        String[] projection = {"_id", "topic", "workername"};
+        String selection = "workername = '"+workerName+"'";
+        Uri uri = Uri.parse(ChatProvider.URL + "/conversations/name");
+        return new CursorLoader(this, uri, projection, selection, null, null);
     }
 
     @Override
