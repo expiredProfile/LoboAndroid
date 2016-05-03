@@ -75,33 +75,30 @@ public class ChatProvider extends ContentProvider {
                     " name TEXT NOT NULL, " +
                     " professionid TEXT NOT NULL," +
                     " title TEXT NOT NULL,"+
-                    " workerid INTEGER UNIQUE NOT NULL);"
+                    " workerid INTEGER UNIQUE NOT NULL);";
 
-                    + " CREATE TABLE " + MESSAGES_TABLE_NAME +
-                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    " content TEXT NOT NULL, " +
-                    " conversationid TEXT NOT NULL," +
-                    " postname TEXT NOT NULL,"
-                    + "shorttimestamp TEXT NOT NULL);"
-
-                    + " CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
-                    " (_id INTEGER PRIMARY KEY, " +
-                    " topic TEXT NOT NULL);"
-
-                    + " CREATE TABLE " + CONVERSATION_MEMBER_NAME +
-                    " (_id INTEGER PRIMARY KEY, " +
-                    " topic TEXT NOT NULL,"+
-                    " workername INTEGER NOT NULL);"
-
-
-                    + " CREATE TABLE " + ALERTS_TABLE_NAME +
-                    " (_id INTEGER PRIMARY KEY, " +
-                    " topic TEXT NOT NULL, " +
-                    " currenttime TEXT NOT NULL," +
-                    " category INTEGER NOT NULL," +
-                    " postname TEXT NOT NULL," +
-                    " receivergroup INTEGER NOT NULL);";
-
+    static final String table2 = "CREATE TABLE " + MESSAGES_TABLE_NAME +
+            " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            " content TEXT NOT NULL, " +
+            " conversationid TEXT NOT NULL," +
+            " postname TEXT NOT NULL,"
+            + "shorttimestamp TEXT);";
+    static final String table3 = "CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
+            " (_id INTEGER PRIMARY KEY, " +
+            " topic TEXT NOT NULL);";
+    static final String table4 = "CREATE TABLE " + CONVERSATION_MEMBER_NAME +
+            " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            " conversationid TEXT NOT NULL,"+
+            " topic TEXT NOT NULL,"+
+            " lastmessage TEXT NOT NULL,"+
+            " workername INTEGER NOT NULL);";
+    static final String table5 = "CREATE TABLE " + ALERTS_TABLE_NAME +
+            " (_id INTEGER PRIMARY KEY, " +
+            " topic TEXT NOT NULL, " +
+            " currenttime TEXT NOT NULL," +
+            " category INTEGER NOT NULL," +
+            " postname TEXT NOT NULL," +
+            " receivergroup INTEGER NOT NULL);";
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper(Context context) {
@@ -111,6 +108,11 @@ public class ChatProvider extends ContentProvider {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_DB_TABLES);
+            db.execSQL(table2);
+            db.execSQL(table3);
+            db.execSQL(table4);
+            db.execSQL(table5);
+
         }
 
         @Override
@@ -183,7 +185,7 @@ public class ChatProvider extends ContentProvider {
                 Log.d("oma","insert worker()");
                 break;
             case INSERT_CONVERSATION:
-                database.insertWithOnConflict("conversations", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                database.insert("conversations", null, values);
                 break;
             case INSERT_MESSAGE:
                 database.insertWithOnConflict("messages", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
@@ -206,9 +208,11 @@ public class ChatProvider extends ContentProvider {
         int match = uriMatcher.match(uri);
         switch (match){
             case FLUSH_MEMBER:
-                database.rawQuery("DELETE FROM members",null);
+                Log.d("oma","Provider delete");
+                database.delete("members",null,null);
                 break;
             default:
+                Log.d("oma","Provider delete fail");
                 break;
         }
 

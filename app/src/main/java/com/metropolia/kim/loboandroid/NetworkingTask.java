@@ -43,7 +43,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
             httpURLConnection.setReadTimeout(20000);
             httpURLConnection.setDoInput(true);
             httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setRequestProperty("Content-Type","application/xml");
+            //httpURLConnection.setRequestProperty("Content-Type","application/xml");
 
             httpURLConnection.connect();
             InputStream is = httpURLConnection.getInputStream();
@@ -54,6 +54,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                     List<Conversation> conversations = xmlParser.parse(is);
                     Uri deleteUri = Uri.parse(ChatProvider.URL+"/members/flush");
                     this.context.getContentResolver().delete(deleteUri,null,null);
+                    Log.d("oma","Koko: "+conversations.size());
                     for (Conversation c : conversations){
                         ContentValues values = new ContentValues();
                         values.put("_id", c.getID());
@@ -61,8 +62,10 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         Uri uri = Uri.parse(ChatProvider.URL + "/conversations/insert");
                         this.context.getContentResolver().insert(uri, values);
                         List<Message> messages = c.getMessages();
+                        String lastMessage = "";
                         for (Message m : messages){
                             ContentValues val = new ContentValues();
+                            lastMessage = m.getPostName()+": "+m.getContent();
                             val.put("content",m.getContent());
                             val.put("conversationid",m.getConversationID());
                             val.put("postname",m.getPostName());
@@ -74,16 +77,18 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         List<Worker> members = c.getMemberList();
                         for (Worker w : members){
                             ContentValues memVal = new ContentValues();
-                            memVal.put("_id",c.getID());
+                            memVal.put("conversationid",c.getID());
                             memVal.put("topic",c.getTopic());
+                            memVal.put("lastmessage",lastMessage);
                             memVal.put("workername",w.getName());
                             Uri memU = Uri.parse(ChatProvider.URL + "/members/insert");
                             this.context.getContentResolver().insert(memU, memVal);
                         }
                     }
+                    break;
 
                 case "message":
-                    MessageXmlParser messsageParser = new MessageXmlParser();
+                   /* MessageXmlParser messsageParser = new MessageXmlParser();
                     List<Message> messages = messsageParser.parse(is);
                     for(Message m : messages){
                         ContentValues values = new ContentValues();
@@ -93,7 +98,8 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         values.put("shorttimestamp", m.getShortTime());
                         Uri uri = Uri.parse(ChatProvider.URL+"messages/insert");
                         this.context.getContentResolver().insert(uri, values);
-                    }
+                    }*/
+                    break;
 
                 case "worker":
                     WorkerXmlParser workerParser = new WorkerXmlParser();
@@ -113,6 +119,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         this.context.getContentResolver().insert(uri, values);
 
                     }
+                    break;
                 case "alert":
                     AlertXmlParser alertParser = new AlertXmlParser();
                     List<Alert> alerts = alertParser.parse(is);
@@ -127,7 +134,9 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         Uri uri = Uri.parse(ChatProvider.URL + "/alerts/insert");
                         this.context.getContentResolver().insert(uri, values);
                     }
+                    break;
             }
+            is.close();
 
         } catch (Exception e) {
             e.printStackTrace();
