@@ -20,14 +20,13 @@ import android.widget.SimpleCursorAdapter;
  * Created by kimmo on 27/04/2016.
  */
 public class AlertsActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
-    RadioGroup catRadioGroup;
-    RadioGroup recRadioGroup;
-    RadioGroup hisRadioGroup;
-    ListView alertHistoryView;
-
-    int range = -1;
-
+    private RadioGroup catRadioGroup;
+    private RadioGroup recRadioGroup;
+    private RadioGroup hisRadioGroup;
+    private ListView alertHistoryView;
     private SimpleCursorAdapter adapter;
+
+    private int range = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +57,21 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
         //Get input
         int alertCat = catRadioGroup.getCheckedRadioButtonId();
         int alertRec = recRadioGroup.getCheckedRadioButtonId();
+
+        //POST?
+
+        //String[] params = {"resources/Alerts/?", "alert"};
+        //NetworkingTask networkTask = new NetworkingTask(this);
+        //networkTask.execute(params);
+
+        /*
+        Alert columns:
+            " topic TEXT NOT NULL, " +
+            " currenttime TEXT NOT NULL," +
+            " category INTEGER NOT NULL," +
+            " postname TEXT NOT NULL," +
+            " receivergroup INTEGER NOT NULL);"
+         */
     }
 
     public void getAlertHistory () {
@@ -66,13 +80,13 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
         switch (rangeInput) {
             case R.id.hisRadio1: //5
-                range = 5;
+                range = 0;
                 break;
             case R.id.hisRadio2: //10
-                range = 10;
+                range = 1;
                 break;
             case R.id.hisRadio3: //All
-                range = 0;
+                range = 2;
                 break;
             default:
                 Log.d("ALERT", "Invalid history range -1");
