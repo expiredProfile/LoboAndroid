@@ -36,15 +36,6 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -102,7 +93,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
         getLoaderManager().initLoader(0, null, this);
 
         // creating and binding binding adapter
-        this.adapter = new SimpleCursorAdapter(this, R.layout.alerts_list_item, null, fromColumns, toViews, 0);
+        this.adapter = new SimpleCursorAdapter(this, R.layout.list_item_alerts, null, fromColumns, toViews, 0);
         alertHistoryView.setAdapter(this.adapter);
     }
 
