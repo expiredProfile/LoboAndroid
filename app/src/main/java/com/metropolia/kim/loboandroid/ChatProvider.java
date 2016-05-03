@@ -39,15 +39,18 @@ public class ChatProvider extends ContentProvider {
     private static final int INSERT_MEMBER = 11;
     private static final int FLUSH_MEMBER = 12;
 
+    private static final int FLUSH_MESSAGES = 13;
+
 
     static final UriMatcher uriMatcher;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER_NAME, "conversations/name",CONVERSATIONS_NAME);
-        uriMatcher.addURI(PROVIDER_NAME, "conversations/id/#",CONVERSATION_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "conversations/id",CONVERSATION_ID);
         uriMatcher.addURI(PROVIDER_NAME, "messages",MESSAGES_BY_ID);
-        uriMatcher.addURI(PROVIDER_NAME, "messages/latest/#",MESSAGES_LATEST_ID);
+        uriMatcher.addURI(PROVIDER_NAME,"messages/flush",FLUSH_MESSAGES);
+        uriMatcher.addURI(PROVIDER_NAME, "messages/latest",MESSAGES_LATEST_ID);
         uriMatcher.addURI(PROVIDER_NAME, "workers",ALL_WORKERS);
 
         uriMatcher.addURI(PROVIDER_NAME,"workers/insert",INSERT_WORKER);
@@ -81,6 +84,7 @@ public class ChatProvider extends ContentProvider {
             " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             " content TEXT NOT NULL, " +
             " conversationid TEXT NOT NULL," +
+            " messageid INTEGER UNIQUE NOT NULL," +
             " postname TEXT NOT NULL,"
             + "shorttimestamp TEXT);";
     static final String table3 = "CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
@@ -188,7 +192,7 @@ public class ChatProvider extends ContentProvider {
                 database.insert("conversations", null, values);
                 break;
             case INSERT_MESSAGE:
-                database.insertWithOnConflict("messages", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                database.insert("messages", null, values);
                 break;
             case INSERT_ALERT:
                 database.insertWithOnConflict("alerts", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
@@ -211,6 +215,9 @@ public class ChatProvider extends ContentProvider {
                 Log.d("oma","Provider delete");
                 database.delete("members",null,null);
                 break;
+            case FLUSH_MESSAGES:
+                Log.d("oma","Messages del");
+                database.delete("messages",null,null);
             default:
                 Log.d("oma","Provider delete fail");
                 break;
