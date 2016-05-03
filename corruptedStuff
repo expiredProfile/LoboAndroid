@@ -1,0 +1,152 @@
+[33mcommit 88499bfd77acb1e229b8eaa594e1203053155e4b[m
+Author: “Aidesign” <kim.moller2@gmail.com>
+Date:   Tue May 3 10:23:25 2016 +0300
+
+    create conversation check box thing done
+
+[1mdiff --git a/.idea/gradle.xml b/.idea/gradle.xml[m
+[1mindex f4f39e8..ee6ddd0 100644[m
+[1m--- a/.idea/gradle.xml[m
+[1m+++ b/.idea/gradle.xml[m
+[36m@@ -3,8 +3,21 @@[m
+   <component name="GradleSettings">[m
+     <option name="linkedExternalProjectsSettings">[m
+       <GradleProjectSettings>[m
+[31m-        <option name="distributionType" value="DEFAULT_WRAPPED" />[m
+[32m+[m[32m        <option name="distributionType" value="LOCAL" />[m
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />[m
+[32m+[m[32m        <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-2.10" />[m
+[32m+[m[32m        <option name="modules">[m
+[32m+[m[32m          <set>[m
+[32m+[m[32m            <option value="$PROJECT_DIR$" />[m
+[32m+[m[32m            <option value="$PROJECT_DIR$/app" />[m
+[32m+[m[32m          </set>[m
+[32m+[m[32m        </option>[m
+[32m+[m[32m        <option name="myModules">[m
+[32m+[m[32m          <set>[m
+[32m+[m[32m            <option value="$PROJECT_DIR$" />[m
+[32m+[m[32m            <option value="$PROJECT_DIR$/app" />[m
+[32m+[m[32m          </set>[m
+[32m+[m[32m        </option>[m
+       </GradleProjectSettings>[m
+     </option>[m
+   </component>[m
+[1mdiff --git a/app/src/main/java/com/metropolia/kim/loboandroid/ChatProvider.java b/app/src/main/java/com/metropolia/kim/loboandroid/ChatProvider.java[m
+[1mindex 033cb9f..067258b 100644[m
+[1m--- a/app/src/main/java/com/metropolia/kim/loboandroid/ChatProvider.java[m
+[1m+++ b/app/src/main/java/com/metropolia/kim/loboandroid/ChatProvider.java[m
+[36m@@ -38,30 +38,30 @@[m [mpublic class ChatProvider extends ContentProvider {[m
+     static final String ALERTS_TABLE_NAME = "alerts";[m
+     static final int DATABASE_VERSION = 1;[m
+     static final String CREATE_DB_TABLES =[m
+[31m-            " CREATE TABLE " + WORKERS_TABLE_NAME +[m
+[32m+[m[32m            "CREATE TABLE " + WORKERS_TABLE_NAME +[m
+                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +[m
+                     " name TEXT NOT NULL, " +[m
+                     " professionid TEXT NOT NULL," +[m
+[31m-                    " title TEXT NOT NULL)"[m
+[32m+[m[32m                    " title TEXT NOT NULL);"[m
+ [m
+[31m-                    + "CREATE TABLE " + MESSAGES_TABLE_NAME +[m
+[32m+[m[32m                    + " CREATE TABLE " + MESSAGES_TABLE_NAME +[m
+                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +[m
+                     " content TEXT NOT NULL, " +[m
+                     " conversationid TEXT NOT NULL," +[m
+                     " postname TEXT NOT NULL,"[m
+[31m-                    + "shorttimestamp TEXT NOT NULL)"[m
+[32m+[m[32m                    + "shorttimestamp TEXT NOT NULL);"[m
+ [m
+[31m-                    + "CREATE TABLE " + CONVERSATIONS_TABLE_NAME +[m
+[32m+[m[32m                    + " CREATE TABLE " + CONVERSATIONS_TABLE_NAME +[m
+                     " (_id INTEGER PRIMARY KEY, " +[m
+[31m-                    " topic TEXT NOT NULL)"[m
+[32m+[m[32m                    " topic TEXT NOT NULL);"[m
+ [m
+[31m-                    + "CREATE TABLE " + ALERTS_TABLE_NAME +[m
+[32m+[m[32m                    + " CREATE TABLE " + ALERTS_TABLE_NAME +[m
+                     " (_id INTEGER PRIMARY KEY, " +[m
+                     " topic TEXT NOT NULL, " +[m
+                     " currenttime TEXT NOT NULL," +[m
+                     " category INTEGER NOT NULL," +[m
+                     " postname TEXT NOT NULL," +[m
+[31m-                    " receivergroup INTEGER NOT NULL)";[m
+[32m+[m[32m                    " receivergroup INTEGER NOT NULL);";[m
+ [m
+ [m
+     private static class DatabaseHelper extends SQLiteOpenHelper {[m
+[1mdiff --git a/app/src/main/java/com/metropolia/kim/loboandroid/DownloadXmlTask.java b/app/src/main/java/coerror: inflate: data stream error (unknown compression method)
+error: unable to unpack 53229f7012ffa15a73717e27ec7fa82b1ba61d4b header
+m/metropolia/kim/loboandroid/DownloadXmlTask.java[m
+[1mdeleted file mode 100644[m
+[1mindex 54aea1b..0000000[m
+[1m--- a/app/src/main/java/com/metropolia/kim/loboandroid/DownloadXmlTask.java[m
+[1m+++ /dev/null[m
+[36m@@ -1,8 +0,0 @@[m
+[31m-package com.metropolia.kim.loboandroid;[m
+[31m-[m
+[31m-/**[m
+[31m- * Created by kimmo on 27/04/2016.[m
+[31m- */[m
+[31m-public class DownloadXmlTask {[m
+[31m-[m
+[31m-}[m
+[1mdiff --git a/app/src/main/java/com/metropolia/kim/loboandroid/MainActivity.java b/app/src/main/java/com/metropolia/kim/loboandroid/MainActivity.java[m
+[1mindex 6061b27..3b3067b 100644[m
+[1m--- a/app/src/main/java/com/metropolia/kim/loboandroid/MainActivity.java[m
+[1m+++ b/app/src/main/java/com/metropolia/kim/loboandroid/MainActivity.java[m
+[36m@@ -63,11 +63,10 @@[m [mpublic class MainActivity extends AppCompatActivity[m
+ [m
+         //getLoaderManager().initLoader(0, null, this);[m
+ [m
+[31m-        ListView lv = (ListView)findViewById(R.id.myListView);[m
+[32m+[m[32m        ListView lv = (ListView) findViewById(R.id.myListView);[m
+         lv.setAdapter(myAdapter);[m
+ [m
+ [m
+[31m-[m
+     }[m
+ [m
+     @Override[m
+[1mdiff --git a/app/src/main/java/com/metropolia/kim/loboandroid/NetworkingTask.java b/app/src/main/java/com/metropolia/kim/loboandroid/NetworkingTask.java[m
+[1mindex 8d1205a..a7d031b 100644[m
+[1m--- a/app/src/main/java/com/metropolia/kim/loboandroid/NetworkingTask.java[m
+[1m+++ b/app/src/main/java/com/metropolia/kim/loboandroid/NetworkingTask.java[m
+[36m@@ -2,6 +2,7 @@[m [mpackage com.metropolia.kim.loboandroid;[m
+ [m
+ import android.content.ContentValues;[m
+ import android.content.Context;[m
+[32m+[m[32mimport android.content.Intent;[m
+ import android.os.AsyncTask;[m
+ import android.util.Log;[m
+ [m
+[36m@@ -19,10 +20,10 @@[m [mimport java.util.List;[m
+ [m
+ public class NetworkingTask extends AsyncTask<String, String, String> {[m
+     private HttpURLConnection httpURLConnection;[m
+[31m-    private String baseurl = "http://10.0.2.2:8080/LoboChat/";[m
+[32m+[m[32m    private String baseurl = "http://192.168.43.9:8080/LoboChat/";[m
+     private Context context;[m
+[31m-[m
+     public NetworkingTask(Context context) {[m
+[32m+[m
+         this.context = context;[m
+     }[m
+ [m
+[36m@@ -59,11 +60,11 @@[m [mpublic class NetworkingTask extends AsyncTask<String, String, String> {[m
+ [m
+                         values.put("name", w.getName());[m
+                         values.put("professionid", w.getGroupID());[m
+[31m-                        values.put("title", w.getTitle());[m
+[31m-                        Log.d("TEST", w.getName());[m
+[31m-                        Log.d("TEST", w.getTitle());[m
+[31m-                        Log.d("TEST",".." +  w.getGroupID());[m
+[31m-[m
+[32m+[m[32m                        if(w.getTitle().equals("Psychotherapist")){[m
+[32m+[m[32m                            values.put("title", "Therapist");[m
+[32m+[m[32m                        } else {[m
+[32m+[m[32m                            values.put("title", w.getTitle());[m
+[32m+[m[32m                        }[m
+                         this.context.getContentResolver().insert(ChatProvider.CONTENT_URI, values);[m
+ [m
+                     }[m
+fatal: unable to read 53229f7012ffa15a73717e27ec7fa82b1ba61d4b
