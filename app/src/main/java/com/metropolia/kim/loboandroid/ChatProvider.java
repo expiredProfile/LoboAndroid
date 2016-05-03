@@ -46,7 +46,7 @@ public class ChatProvider extends ContentProvider {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER_NAME, "conversations/name",CONVERSATIONS_NAME);
         uriMatcher.addURI(PROVIDER_NAME, "conversations/id/#",CONVERSATION_ID);
-        uriMatcher.addURI(PROVIDER_NAME, "messages/#",MESSAGES_BY_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "messages",MESSAGES_BY_ID);
         uriMatcher.addURI(PROVIDER_NAME, "messages/latest/#",MESSAGES_LATEST_ID);
         uriMatcher.addURI(PROVIDER_NAME, "workers",ALL_WORKERS);
 

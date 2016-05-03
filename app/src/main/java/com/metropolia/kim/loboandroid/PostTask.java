@@ -15,8 +15,10 @@ import com.metropolia.kim.xmlparser.ConversationXmlParser;
 import com.metropolia.kim.xmlparser.MessageXmlParser;
 import com.metropolia.kim.xmlparser.WorkerXmlParser;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -74,11 +76,25 @@ public class PostTask extends AsyncTask<String, String, String> {
 
                 case "message":
                     break;
-
-
                 case "alert":
-                    break;
+                    bufferedWriter.write(xml);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
 
+                    int alertResponseCode = httpURLConnection.getResponseCode();
+                    Log.d("POST", "alert post response: " + alertResponseCode);
+                    try {
+                        InputStream is = httpURLConnection.getInputStream();
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                        int newAlertId = Integer.parseInt(bufferedReader.readLine());
+                        Log.d("ALERT POST", "Server returned alert id: " + newAlertId);
+                        //get alert by ID for notification etc
+                        is.close();
+                    } catch (Exception e) {
+                        Log.d("ALERT POST", "Exception in inputStream: " + e);
+                    }
+                    os.close();
+                    break;
             }
 
         } catch (Exception e) {

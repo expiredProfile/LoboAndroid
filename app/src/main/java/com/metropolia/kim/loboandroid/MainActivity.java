@@ -15,8 +15,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         //TextView title = (TextView)findViewById(R.id.textProfession);
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
-        //workerTitle = i.getStringExtra("workerTitle");
+        workerTitle = i.getStringExtra("workerTitle");
 
         lv = (ListView) findViewById(R.id.myListView);
 
@@ -73,6 +75,19 @@ public class MainActivity extends AppCompatActivity
             nt.execute(params);
         }
         fillData();
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView conversationid = (TextView) view.findViewById(R.id.cid);
+                TextView topic = (TextView) view.findViewById(R.id.topic);
+                Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
+                intent.putExtra("conversationid", conversationid.getText().toString());
+                intent.putExtra("topic", topic.getText().toString());
+                intent.putExtra("workerName", workerName);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -91,16 +106,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (first) {
-            first = false;
-        } else {
-            Log.d("oma", "onResume else");
-            NetworkingTask nt = new NetworkingTask(this);
-            String[] params = {"resources/Conversations/" + workerName, "conversation"};
-            nt.execute(params);
-        }
-
+        Log.d("oma", "onResume else");
+        NetworkingTask nt = new NetworkingTask(this);
+        String[] params = {"resources/Conversations/" + workerName, "conversation"};
+        nt.execute(params);
     }
+
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -127,6 +138,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         alertIntent = new Intent(this, AlertsActivity.class);
+        alertIntent.putExtra("workerName",workerName);
         usersIntent = new Intent(this, UsersActivity.class);
         usersIntent.putExtra("workerName", workerName);
         // Handle navigation view item clicks here.
