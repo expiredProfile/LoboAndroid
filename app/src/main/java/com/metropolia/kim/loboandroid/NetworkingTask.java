@@ -133,20 +133,24 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                     break;
 
                 case "alert":
+                    //Empty alert table
+                    Uri emptyAlerts = Uri.parse(ChatProvider.URL + "/alerts/flush");
+                    this.context.getContentResolver().delete(emptyAlerts, null, null);
+                    //Parse alert history
                     AlertXmlParser alertParser = new AlertXmlParser(); //Parse history list
                     List<Alert> alerts = alertParser.parse(is);
                     for (Alert a : alerts) {
-                        /*
                         ContentValues values = new ContentValues();
 
                         values.put("topic", a.getAlertTopic());
                         values.put("currenttime", a.getCurrentTime());
                         values.put("category", a.getAlertCat());
                         values.put("postname", a.getPostName());
+                        values.put("posttitle", a.getPostTitle());
                         values.put("receivergroup", a.getReceiverGroup());
+
                         Uri uri = Uri.parse(ChatProvider.URL + "/alerts/insert");
                         this.context.getContentResolver().insert(uri, values);
-                        */
                     }
                     break;
             }
