@@ -65,7 +65,7 @@ public class UsersActivity extends AppCompatActivity implements android.app.Load
         getLoaderManager().initLoader(0, null, this);
 
         // creating and binding binding adapter
-        this.adapter = new SimpleCursorAdapter(this, R.layout.users_list_item, null, fromColumns, toViews, 0);
+        this.adapter = new SimpleCursorAdapter(this, R.layout.list_item_users, null, fromColumns, toViews, 0);
         listView.setAdapter(this.adapter);
     }
 
