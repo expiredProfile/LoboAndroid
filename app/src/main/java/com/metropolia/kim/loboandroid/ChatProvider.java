@@ -71,7 +71,7 @@ public class ChatProvider extends ContentProvider {
                     " postname TEXT NOT NULL,"
                     + "shorttimestamp TEXT NOT NULL);"
 
-                    + " CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
+                    + "CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY, " +
                     " topic TEXT NOT NULL);"
 
