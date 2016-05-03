@@ -6,8 +6,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.metropolia.kim.loboandroiddata.Alert;
 import com.metropolia.kim.loboandroiddata.Conversation;
 import com.metropolia.kim.loboandroiddata.Worker;
+import com.metropolia.kim.xmlparser.AlertXmlParser;
 import com.metropolia.kim.xmlparser.ConversationXmlParser;
 import com.metropolia.kim.xmlparser.WorkerXmlParser;
 
@@ -67,6 +69,8 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
 
                     }
                 case "alert":
+                    AlertXmlParser alertParser = new AlertXmlParser();
+                    List<Alert> alerts = alertParser.parse(is);
             }
 
         } catch (Exception e) {
