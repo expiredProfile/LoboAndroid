@@ -1,5 +1,6 @@
 package com.metropolia.kim.loboandroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,8 @@ import android.view.MenuItem;
  * Created by kimmo on 27/04/2016.
  */
 public class CreateConversationActivity extends AppCompatActivity {
+    private String workerName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +23,10 @@ public class CreateConversationActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        Intent i = getIntent();
+        workerName = i.getStringExtra("workerName");
+
     }
 
     @Override
