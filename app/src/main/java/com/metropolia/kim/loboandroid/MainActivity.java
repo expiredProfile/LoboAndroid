@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity
         if (first){
             first = false;
         } else {
+            Log.d("oma","onResume else");
             NetworkingTask nt = new NetworkingTask(this);
             String[] params = {"resources/Conversations/"+workerName,"conversation"};
             nt.execute(params);
@@ -145,21 +146,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void fillData() {
-        String[] fromColumns = {"_id","topic"}; // from which COLUMNS
-        int[] toViews = {R.id.cid,R.id.topic}; // TO which VIEWS
+        String[] fromColumns = {"conversationid","topic","lastmessage"}; // from which COLUMNS
+        int[] toViews = {R.id.cid,R.id.topic,R.id.message}; // TO which VIEWS
 
         // initializing the CursorLoader
         getLoaderManager().initLoader(0, null, this);
 
         // creating and binding binding adapter
-        this.myAdapter = new SimpleCursorAdapter(this, R.layout.conversation_list_item, null, fromColumns, toViews, 0);
+        this.myAdapter = new SimpleCursorAdapter(this, R.layout.list_item_conversation, null, fromColumns, toViews, 0);
         lv.setAdapter(this.myAdapter);
     }
 
     @Override
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d("oma","onCreateLoader()");
-        String[] projection = {"_id", "topic", "workername"};
+        String[] projection = {"_id", "conversationid", "topic", "lastmessage", "workername"};
         String selection = "workername = '"+workerName+"'";
         Uri uri = Uri.parse(ChatProvider.URL + "/conversations/name");
         return new CursorLoader(this, uri, projection, selection, null, null);
