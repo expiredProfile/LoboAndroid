@@ -76,10 +76,8 @@ public class MainActivity extends AppCompatActivity
 
         //getLoaderManager().initLoader(0, null, this);
 
-        ListView lv = (ListView)findViewById(R.id.myListView);
+        ListView lv = (ListView) findViewById(R.id.myListView);
         lv.setAdapter(myAdapter);
-
-
 
     }
 
