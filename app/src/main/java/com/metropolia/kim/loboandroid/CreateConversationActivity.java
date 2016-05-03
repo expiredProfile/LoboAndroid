@@ -42,6 +42,7 @@ public class CreateConversationActivity extends AppCompatActivity implements and
 
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
+
         lv = (ListView) findViewById(R.id.myListView);
         fillData();
 
@@ -80,7 +81,7 @@ public class CreateConversationActivity extends AppCompatActivity implements and
                 }
                 Log.d("oma",workerName);
                 String workers = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + workerName + "</name><title></title></workerList>";
-                ;
+
                 for (String s : selected) {
                     workers += "<workerList><id></id><name>" + s + "</name><title></title></workerList>";
                 }

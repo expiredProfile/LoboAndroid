@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CreateConversationActivity.class);
-                intent.putExtra("workerName",workerName);
+                intent.putExtra("workerName", workerName);
                 startActivity(intent);
             }
         });
@@ -59,14 +59,13 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
         //TextView username = (TextView)findViewById(R.id.textUsername);
         //TextView title = (TextView)findViewById(R.id.textProfession);
         Intent i = getIntent();
-       /* workerName = i.getStringExtra("workerName");
-        workerTitle = i.getStringExtra("workerTitle");*/
+        workerName = i.getStringExtra("workerName");
+        //workerTitle = i.getStringExtra("workerTitle");
 
-        lv = (ListView)findViewById(R.id.myListView);
+        lv = (ListView) findViewById(R.id.myListView);
 
         if (first) {
             NetworkingTask nt = new NetworkingTask(this);
@@ -92,12 +91,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (first){
+        if (first) {
             first = false;
         } else {
-            Log.d("oma","onResume else");
+            Log.d("oma", "onResume else");
             NetworkingTask nt = new NetworkingTask(this);
-            String[] params = {"resources/Conversations/"+workerName,"conversation"};
+            String[] params = {"resources/Conversations/" + workerName, "conversation"};
             nt.execute(params);
         }
 
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         alertIntent = new Intent(this, AlertsActivity.class);
         usersIntent = new Intent(this, UsersActivity.class);
-        usersIntent.putExtra("workerName",workerName);
+        usersIntent.putExtra("workerName", workerName);
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -147,8 +146,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void fillData() {
-        String[] fromColumns = {"conversationid","topic","lastmessage"}; // from which COLUMNS
-        int[] toViews = {R.id.cid,R.id.topic,R.id.message}; // TO which VIEWS
+        String[] fromColumns = {"conversationid", "topic", "lastmessage"}; // from which COLUMNS
+        int[] toViews = {R.id.cid, R.id.topic, R.id.message}; // TO which VIEWS
 
         // initializing the CursorLoader
         getLoaderManager().initLoader(0, null, this);
@@ -160,9 +159,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d("oma","onCreateLoader()");
+        Log.d("oma", "onCreateLoader()");
         String[] projection = {"_id", "conversationid", "topic", "lastmessage", "workername"};
-        String selection = "workername = '"+workerName+"'";
+        String selection = "workername = '" + workerName + "'";
         Uri uri = Uri.parse(ChatProvider.URL + "/conversations/name");
         return new CursorLoader(this, uri, projection, selection, null, null);
     }

@@ -3,6 +3,7 @@ package com.metropolia.kim.loboandroid;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.metropolia.kim.loboandroiddata.Worker;
 import com.metropolia.kim.xmlparser.WorkerXmlParser;
@@ -20,8 +21,8 @@ public class LoginTask extends AsyncTask<String, String, Boolean> {
     private Context context;
 
     //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; // henkka
-    private String baseurl = "http://192.168.43.9:8080/LoboChat/"; // kim
-    //private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
+    //private String baseurl = "http://192.168.43.9:8080/LoboChat/"; // kim
+    private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
 
     private String wname = "";
     private String wtitle = "";
@@ -42,6 +43,7 @@ public class LoginTask extends AsyncTask<String, String, Boolean> {
         if (aBoolean) {
             Intent intent = new Intent(this.context, MainActivity.class);
             intent.putExtra("workerName",wname);
+            Log.d("AYY", wname);
             intent.putExtra("workerTitle", wtitle);
             this.context.startActivity(intent);
         } else {
