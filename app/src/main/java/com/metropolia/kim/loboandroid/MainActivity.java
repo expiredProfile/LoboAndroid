@@ -1,13 +1,11 @@
 package com.metropolia.kim.loboandroid;
 
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,11 +14,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity
@@ -69,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
-        lv = (ListView) findViewById(R.id.myListView);
+        lv = (ListView)findViewById(R.id.myListView);
 
         if (first) {
             NetworkingTask nt = new NetworkingTask(this);

@@ -6,7 +6,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -112,7 +111,7 @@ public class CreateConversationActivity extends AppCompatActivity implements and
         getLoaderManager().initLoader(0, null, this);
 
         // creating and binding binding adapter
-        this.adapter = new SimpleCursorAdapter(this, R.layout.create_conversation_list_item, null, fromColumns, toViews, 0);
+        this.adapter = new SimpleCursorAdapter(this, R.layout.list_item_create_conversation, null, fromColumns, toViews, 0);
         lv.setAdapter(this.adapter);
     }
 
