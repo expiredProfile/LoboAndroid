@@ -25,11 +25,11 @@ import java.util.List;
 public class NetworkingTask extends AsyncTask<String, String, String> {
     private HttpURLConnection httpURLConnection;
 
-    private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
-    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
-    //private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
+    //private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
+    private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
 
     private Context context;
+
     public NetworkingTask(Context context) {
         this.context = context;
     }
@@ -46,7 +46,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
             httpURLConnection.setReadTimeout(20000);
             httpURLConnection.setDoInput(true);
             httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setRequestProperty("Content-Type","application/xml");
+            //httpURLConnection.setRequestProperty("Content-Type","application/xml");
 
             httpURLConnection.connect();
             InputStream is = httpURLConnection.getInputStream();
@@ -55,9 +55,43 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                 case "conversation":
                     ConversationXmlParser xmlParser = new ConversationXmlParser();
                     List<Conversation> conversations = xmlParser.parse(is);
+                    Uri deleteUri = Uri.parse(ChatProvider.URL + "/members/flush");
+                    this.context.getContentResolver().delete(deleteUri, null, null);
+                    Log.d("oma", "Koko: " + conversations.size());
+                    for (Conversation c : conversations) {
+                        ContentValues values = new ContentValues();
+                        values.put("_id", c.getID());
+                        values.put("topic", c.getTopic());
+                        Uri uri = Uri.parse(ChatProvider.URL + "/conversations/insert");
+                        this.context.getContentResolver().insert(uri, values);
+                        List<Message> messages = c.getMessages();
+                        String lastMessage = "";
+                        for (Message m : messages) {
+                            ContentValues val = new ContentValues();
+                            lastMessage = m.getPostName() + ": " + m.getContent();
+                            val.put("content", m.getContent());
+                            val.put("conversationid", m.getConversationID());
+                            val.put("postname", m.getPostName());
+                            val.put("shorttimestamp", m.getShortTime());
+                            Uri uri2 = Uri.parse(ChatProvider.URL + "/messages/insert");
+                            this.context.getContentResolver().insert(uri2, val);
+                        }
+
+                        List<Worker> members = c.getMemberList();
+                        for (Worker w : members) {
+                            ContentValues memVal = new ContentValues();
+                            memVal.put("conversationid", c.getID());
+                            memVal.put("topic", c.getTopic());
+                            memVal.put("lastmessage", lastMessage);
+                            memVal.put("workername", w.getName());
+                            Uri memU = Uri.parse(ChatProvider.URL + "/members/insert");
+                            this.context.getContentResolver().insert(memU, memVal);
+                        }
+                    }
+                    break;
 
                 case "message":
-                    MessageXmlParser messsageParser = new MessageXmlParser();
+                   /* MessageXmlParser messsageParser = new MessageXmlParser();
                     List<Message> messages = messsageParser.parse(is);
                     for(Message m : messages){
                         ContentValues values = new ContentValues();
@@ -67,17 +101,18 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         values.put("shorttimestamp", m.getShortTime());
                         Uri uri = Uri.parse(ChatProvider.URL+"messages/insert");
                         this.context.getContentResolver().insert(uri, values);
-                    }
+                    }*/
+                    break;
 
                 case "worker":
                     WorkerXmlParser workerParser = new WorkerXmlParser();
                     List<Worker> workers = workerParser.parse(is);
-                    for(Worker w : workers){
+                    for (Worker w : workers) {
                         ContentValues values = new ContentValues();
 
                         values.put("name", w.getName());
                         values.put("professionid", w.getGroupID());
-                        if(w.getTitle().equals("Psychotherapist")){
+                        if (w.getTitle().equals("Psychotherapist")) {
                             values.put("title", "Therapist");
                         } else {
                             values.put("title", w.getTitle());
@@ -87,6 +122,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         this.context.getContentResolver().insert(uri, values);
 
                     }
+                    break;
                 case "alert":
                     AlertXmlParser alertParser = new AlertXmlParser();
                     List<Alert> alerts = alertParser.parse(is);
@@ -101,7 +137,9 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         Uri uri = Uri.parse(ChatProvider.URL + "/alerts/insert");
                         this.context.getContentResolver().insert(uri, values);
                     }
+                    break;
             }
+            is.close();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -24,11 +24,11 @@ public class ConversationXmlParser {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(in, null);
+            parser.setInput(in, "UTF-8");
             parser.nextTag();
             return readFeed(parser);
         } finally {
-            in.close();
+            //in.close();
         }
     }
 
@@ -161,7 +161,7 @@ public class ConversationXmlParser {
             } else if (xmlName.equals("name")) {
                 name = workerXmlParser.readName(parser);
             } else if (xmlName.equals("title")) {
-                title = workerXmlParser.readName(parser);
+                title = workerXmlParser.readTitle(parser);
             } else if (xmlName.equals("id")) {
                 id = Integer.parseInt(workerXmlParser.readId(parser));
             } else {

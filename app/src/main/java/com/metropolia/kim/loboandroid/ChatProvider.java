@@ -36,12 +36,15 @@ public class ChatProvider extends ContentProvider {
     private static final int INSERT_ALERT = 9;
     private static final int ALERTS_HISTORY = 10;
 
+    private static final int INSERT_MEMBER = 11;
+    private static final int FLUSH_MEMBER = 12;
+
 
     static final UriMatcher uriMatcher;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "conversations/name/#",CONVERSATIONS_NAME);
+        uriMatcher.addURI(PROVIDER_NAME, "conversations/name",CONVERSATIONS_NAME);
         uriMatcher.addURI(PROVIDER_NAME, "conversations/id/#",CONVERSATION_ID);
         uriMatcher.addURI(PROVIDER_NAME, "messages/#",MESSAGES_BY_ID);
         uriMatcher.addURI(PROVIDER_NAME, "messages/latest/#",MESSAGES_LATEST_ID);
@@ -53,6 +56,9 @@ public class ChatProvider extends ContentProvider {
 
         uriMatcher.addURI(PROVIDER_NAME,"alerts/insert",INSERT_ALERT);
         uriMatcher.addURI(PROVIDER_NAME,"alerts/range/#",ALERTS_HISTORY);
+
+        uriMatcher.addURI(PROVIDER_NAME,"/members/insert",INSERT_MEMBER);
+        uriMatcher.addURI(PROVIDER_NAME,"/members/flush",FLUSH_MEMBER);
     }
 
     private SQLiteDatabase database;
@@ -61,6 +67,7 @@ public class ChatProvider extends ContentProvider {
     static final String MESSAGES_TABLE_NAME = "messages";
     static final String CONVERSATIONS_TABLE_NAME = "conversations";
     static final String ALERTS_TABLE_NAME = "alerts";
+    static final String CONVERSATION_MEMBER_NAME = "members";
     static final int DATABASE_VERSION = 1;
     static final String CREATE_DB_TABLES =
             "CREATE TABLE " + WORKERS_TABLE_NAME +
@@ -68,27 +75,30 @@ public class ChatProvider extends ContentProvider {
                     " name TEXT NOT NULL, " +
                     " professionid TEXT NOT NULL," +
                     " title TEXT NOT NULL,"+
-                    " workerid INTEGER UNIQUE NOT NULL);"
+                    " workerid INTEGER UNIQUE NOT NULL);";
 
-                    + " CREATE TABLE " + MESSAGES_TABLE_NAME +
-                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    " content TEXT NOT NULL, " +
-                    " conversationid TEXT NOT NULL," +
-                    " postname TEXT NOT NULL,"
-                    + "shorttimestamp TEXT NOT NULL);"
-
-                    + " CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
-                    " (_id INTEGER PRIMARY KEY, " +
-                    " topic TEXT NOT NULL);"
-
-                    + " CREATE TABLE " + ALERTS_TABLE_NAME +
-                    " (_id INTEGER PRIMARY KEY, " +
-                    " topic TEXT NOT NULL, " +
-                    " currenttime TEXT NOT NULL," +
-                    " category INTEGER NOT NULL," +
-                    " postname TEXT NOT NULL," +
-                    " receivergroup INTEGER NOT NULL);";
-
+    static final String table2 = "CREATE TABLE " + MESSAGES_TABLE_NAME +
+            " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            " content TEXT NOT NULL, " +
+            " conversationid TEXT NOT NULL," +
+            " postname TEXT NOT NULL,"
+            + "shorttimestamp TEXT);";
+    static final String table3 = "CREATE TABLE " + CONVERSATIONS_TABLE_NAME +
+            " (_id INTEGER PRIMARY KEY, " +
+            " topic TEXT NOT NULL);";
+    static final String table4 = "CREATE TABLE " + CONVERSATION_MEMBER_NAME +
+            " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            " conversationid TEXT NOT NULL,"+
+            " topic TEXT NOT NULL,"+
+            " lastmessage TEXT NOT NULL,"+
+            " workername INTEGER NOT NULL);";
+    static final String table5 = "CREATE TABLE " + ALERTS_TABLE_NAME +
+            " (_id INTEGER PRIMARY KEY, " +
+            " topic TEXT NOT NULL, " +
+            " currenttime TEXT NOT NULL," +
+            " category INTEGER NOT NULL," +
+            " postname TEXT NOT NULL," +
+            " receivergroup INTEGER NOT NULL);";
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper(Context context) {
@@ -98,6 +108,11 @@ public class ChatProvider extends ContentProvider {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_DB_TABLES);
+            db.execSQL(table2);
+            db.execSQL(table3);
+            db.execSQL(table4);
+            db.execSQL(table5);
+
         }
 
         @Override
@@ -124,7 +139,7 @@ public class ChatProvider extends ContentProvider {
         Cursor c = null;
         switch(match){
             case CONVERSATIONS_NAME:
-                c = database.query("conversations", projection, selection, selectionArgs, null, null, sortOrder);
+                c = database.query(CONVERSATION_MEMBER_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case CONVERSATION_ID:
                 c = database.query("conversations", projection, selection, selectionArgs, null, null, sortOrder);
@@ -170,13 +185,16 @@ public class ChatProvider extends ContentProvider {
                 Log.d("oma","insert worker()");
                 break;
             case INSERT_CONVERSATION:
-                database.insertWithOnConflict("conversations", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                database.insert("conversations", null, values);
                 break;
             case INSERT_MESSAGE:
                 database.insertWithOnConflict("messages", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
                 break;
             case INSERT_ALERT:
                 database.insertWithOnConflict("alerts", null, values,SQLiteDatabase.CONFLICT_ROLLBACK);
+                break;
+            case INSERT_MEMBER:
+                database.insert("members",null,values);
                 break;
             default:
                 Log.d("oma","Insert default");
@@ -187,6 +205,17 @@ public class ChatProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        int match = uriMatcher.match(uri);
+        switch (match){
+            case FLUSH_MEMBER:
+                Log.d("oma","Provider delete");
+                database.delete("members",null,null);
+                break;
+            default:
+                Log.d("oma","Provider delete fail");
+                break;
+        }
+
         return 0;
     }
 
