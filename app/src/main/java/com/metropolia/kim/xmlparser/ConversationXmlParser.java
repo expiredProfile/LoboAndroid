@@ -53,6 +53,7 @@ public class ConversationXmlParser {
         List entries = new ArrayList();
 
         parser.require(XmlPullParser.START_TAG, ns, "conversations");
+
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -120,6 +121,7 @@ public class ConversationXmlParser {
         String postName = null;
         String shortTime = null;
         String currentTime = null;
+        int messageid = 0;
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -136,11 +138,13 @@ public class ConversationXmlParser {
                 shortTime = messageXmlParser.readShortTime(parser);
             } else if (xmlName.equals("currentTime")) {
                 shortTime = messageXmlParser.readCurrentTime(parser);
+            } else if (xmlName.equals("messageID")) {
+                messageid = Integer.parseInt(messageXmlParser.readMessageid(parser));
             } else {
                 skip(parser);
             }
         }
-        return new Message(content, postName, convID, currentTime, shortTime);
+        return new Message(content, postName, convID, currentTime, shortTime, messageid);
     }
 
     private Worker readWorkerList(XmlPullParser parser) throws XmlPullParserException, IOException {

@@ -17,8 +17,8 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
 import java.util.ArrayList;
+
 
 /**
  * Created by kimmo on 27/04/2016.
@@ -42,6 +42,7 @@ public class CreateConversationActivity extends AppCompatActivity implements and
 
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
+
         lv = (ListView) findViewById(R.id.myListView);
         fillData();
 
@@ -63,7 +64,7 @@ public class CreateConversationActivity extends AppCompatActivity implements and
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        return(super.onCreateOptionsMenu(menu));
+        return (super.onCreateOptionsMenu(menu));
     }
 
     @Override
@@ -80,7 +81,7 @@ public class CreateConversationActivity extends AppCompatActivity implements and
                 }
                 Log.d("oma",workerName);
                 String workers = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + workerName + "</name><title></title></workerList>";
-                ;
+
                 for (String s : selected) {
                     workers += "<workerList><id></id><name>" + s + "</name><title></title></workerList>";
                 }
@@ -133,4 +134,5 @@ public class CreateConversationActivity extends AppCompatActivity implements and
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
     }
+
 }
