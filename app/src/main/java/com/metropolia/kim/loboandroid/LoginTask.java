@@ -21,8 +21,6 @@ public class LoginTask extends AsyncTask<String, String, Boolean> {
     //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; // henkka
     private String baseurl = "http://192.168.43.9:8080/LoboChat/"; // kim
     //private String baseurl = "http://192.168.0.14:8080/LoboChat/"; // henkka hima
-    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; // henkka
-    //private String baseurl = "http://192.168.43.9:8080/LoboChat/"; // kim
     //private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
 
     private String wname = "";
@@ -74,13 +72,12 @@ public class LoginTask extends AsyncTask<String, String, Boolean> {
             ArrayList<String> workerStr = new ArrayList<>();
 
             for(Worker w : workers){
-                if (w.getName().equals(name)){
+                if (w.getName().equals(name)) {
                     this.wname = name;
                     this.wtitle = w.getTitle();
                     allow = true;
-                } else {
-                    Toast.makeText(this.context, "False credentials.", Toast.LENGTH_SHORT).show();
                 }
+
             }
 
 

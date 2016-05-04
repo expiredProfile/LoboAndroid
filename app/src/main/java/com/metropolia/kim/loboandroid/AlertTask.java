@@ -30,8 +30,8 @@ public class AlertTask extends AsyncTask<String, String, String> {
 
     private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
     //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
-
     //private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
+
     private int professionId;
 
     private Context context;
@@ -53,7 +53,7 @@ public class AlertTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        while (true) {
+       // while (true) {
             int largestInDatabase = this.getAlertsFromDatabase();
             try {
                 URL url = new URL(baseurl + "resources/Alerts/Alerthistory/2");
@@ -92,8 +92,9 @@ public class AlertTask extends AsyncTask<String, String, String> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            SystemClock.sleep(10000);
-        }
+            //SystemClock.sleep(10000);
+       // }
+        return null;
     }
 
     private void sentNotification(String topic, String postName) {

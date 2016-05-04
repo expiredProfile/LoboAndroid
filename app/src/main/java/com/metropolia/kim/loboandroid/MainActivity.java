@@ -118,25 +118,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        Intent i = new Intent(this, MessageBackgroundService.class);
-        i.putExtra("workerName",workerName);
-        startService(i);
-        // Stopping the service |
-        // Stopping the alert service
-        Log.d("kek", "stop");
-        stopService(new Intent(getBaseContext(), AlertService.class));
-    }
-
-    //creates the three dots on the up right of the tool bar
-
-    @Override
     protected void onResume() {
         super.onResume();
         Log.d("oma", "onResume");
-        Intent stop = new Intent(this, MessageBackgroundService.class);
-        stopService(stop);
+        stopService(new Intent(getBaseContext(), MessageBackgroundService.class));
         NetworkingTask nt = new NetworkingTask(this);
         String[] params = {"resources/Conversations/" + workerName, "conversation"};
         nt.register(this);
