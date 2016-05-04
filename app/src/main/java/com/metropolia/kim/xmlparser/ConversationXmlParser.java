@@ -52,13 +52,7 @@ public class ConversationXmlParser {
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = new ArrayList();
 
-        try {
-            parser.require(XmlPullParser.START_TAG, ns, "conversations");
-        } catch (Exception e){
-            entries.add(readEntry(parser));
-            return entries;
-        }
-
+        parser.require(XmlPullParser.START_TAG, ns, "conversations");
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {

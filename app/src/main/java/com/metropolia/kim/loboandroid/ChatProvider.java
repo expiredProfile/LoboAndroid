@@ -179,7 +179,7 @@ public class ChatProvider extends ContentProvider {
         }
 
 
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+       // c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
 

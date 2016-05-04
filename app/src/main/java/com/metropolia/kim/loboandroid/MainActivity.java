@@ -63,13 +63,20 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         //TextView username = (TextView)findViewById(R.id.textUsername);
         //TextView title = (TextView)findViewById(R.id.textProfession);
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
+
+        // Starting the service
+        Log.d("kek,", workerTitle);
+        Intent alerIntent = new Intent(getBaseContext(), AlertService.class);
+        alerIntent.putExtra("title", workerTitle);
+        startService(alerIntent);
+
         lv = (ListView) findViewById(R.id.myListView);
+
 
         if (first) {
             NetworkingTask nt = new NetworkingTask(this);
@@ -118,19 +125,27 @@ public class MainActivity extends AppCompatActivity
         stopService(serviceIntent);
     }
 
-    //creates the three dots on the up right of the tool bar
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent i = new Intent(this, MessageBackgroundService.class);
+        i.putExtra("workerName",workerName);
+        startService(i);
+    }
+//creates the three dots on the up right of the tool bar
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("oma", "onResume else");
+        Log.d("oma", "onResume");
+        Intent stop = new Intent(this, MessageBackgroundService.class);
+        stopService(stop);
         NetworkingTask nt = new NetworkingTask(this);
         String[] params = {"resources/Conversations/" + workerName, "conversation"};
         nt.register(this);
         nt.execute(params);
-
-
     }
+
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -176,6 +191,14 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Stopping the service |
+        Log.d("kek", "stop");
+        stopService(new Intent(getBaseContext(), AlertService.class));
     }
 
     private void fillData() {

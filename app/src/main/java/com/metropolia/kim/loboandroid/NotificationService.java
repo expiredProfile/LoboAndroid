@@ -7,6 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import com.metropolia.kim.loboandroiddata.Conversation;
+
+import java.util.ArrayList;
+
 /**
  * Created by Kasper on 3.5.2016.
  */
@@ -15,8 +19,12 @@ public class NotificationService extends IntentService {
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
-     * @param name Used to name the worker thread, important only for debugging.
+     * Used to name the worker thread, important only for debugging.
      */
+    public NotificationService(){
+        super("NotificationService");
+    }
+
     public NotificationService(String name) {
         super(name);
     }

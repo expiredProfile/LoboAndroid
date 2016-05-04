@@ -131,7 +131,8 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
         Log.d("oma","ConnectChatSock");
         chatClient = new WebSocketConnection();
 
-        String wsuri = "ws://192.168.0.14:8080/LoboChat/chatend";
+        //String wsuri = "ws://192.168.0.14:8080/LoboChat/chatend"; //henks hima
+        String wsuri = "ws://192.168.43.109:8080/LoboChat/chatend";
 
         try {
             chatClient.connect(wsuri, new WebSocketHandler(){
@@ -146,7 +147,7 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
                     if (message.equals(conversationid)){
                         Log.d("oma","HAE VIESTIT"+message);
                         NetworkingTask msgs = new NetworkingTask(ConversationActivity.this);
-                        String[] params = {"resources/Conversations/conversationID/" + conversationid, "message"};
+                        String[] params = {"resources/Messages/" + conversationid, "message"};
                         msgs.register(ConversationActivity.this);
                         msgs.execute(params);
                     }
@@ -154,7 +155,8 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
 
                 @Override
                 public void onClose(int code, String reason) {
-                    Log.d("oma", "Connection lost.");
+                    Log.d("oma", "Connection lost:"+reason);
+
                 }
             });
         } catch (WebSocketException e) {
