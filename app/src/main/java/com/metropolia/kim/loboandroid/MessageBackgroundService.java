@@ -12,20 +12,22 @@ import com.metropolia.kim.loboandroiddata.Conversation;
 import java.util.ArrayList;
 
 /**
- * Created by Kasper on 3.5.2016.
+ * Created by Hege on 04/05/2016.
  */
-public class NotificationService extends IntentService {
-
+public class MessageBackgroundService extends IntentService {
+    private String workerName;
+    private ArrayList<Conversation> conversations;
+    private ArrayList<String> cids;
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
-    public NotificationService(){
-        super("NotificationService");
+    public MessageBackgroundService(){
+        super("MessageBackgroundService");
     }
 
-    public NotificationService(String name) {
+    public MessageBackgroundService(String name) {
         super(name);
     }
 

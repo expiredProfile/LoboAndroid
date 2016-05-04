@@ -11,9 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".NotificationService"
-            android:exported="false"></service>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -42,11 +40,18 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AlertNotifierActivity"></activity>
+
         <provider
             android:name=".ChatProvider"
             android:authorities="com.example.provider.chatProvider" />
 
-        <activity android:name=".AlertNotifierActivity"></activity>
+
+
+        <service
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>
