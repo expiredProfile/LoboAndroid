@@ -15,8 +15,6 @@ public class AlertNotifierActivity extends AppCompatActivity {
         Intent i = getIntent();
         alertId = i.getIntExtra("alertId", 0);
         String workerTitle = i.getStringExtra("workerTitle");
-
-        makeAlert();
     }
 
     public void makeAlert() {
