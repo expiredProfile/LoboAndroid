@@ -113,33 +113,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        //Start service
-        serviceIntent = new Intent(this, NotificationService.class);
-        startService(serviceIntent);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "NotificationService stopping", Toast.LENGTH_SHORT).show();
-        stopService(serviceIntent);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Intent i = new Intent(this, MessageBackgroundService.class);
-        i.putExtra("workerName",workerName);
-        startService(i);
-    }
 //creates the three dots on the up right of the tool bar
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("oma", "onResume");
-        Intent stop = new Intent(this, MessageBackgroundService.class);
-        stopService(stop);
+        stopService(new Intent(getBaseContext(), MessageBackgroundService.class));
         NetworkingTask nt = new NetworkingTask(this);
         String[] params = {"resources/Conversations/" + workerName, "conversation"};
         nt.register(this);
@@ -199,6 +187,10 @@ public class MainActivity extends AppCompatActivity
         // Stopping the service |
         Log.d("kek", "stop");
         stopService(new Intent(getBaseContext(), AlertService.class));
+
+        Intent i = new Intent(this, MessageBackgroundService.class);
+        i.putExtra("workerName",workerName);
+        startService(i);
     }
 
     private void fillData() {

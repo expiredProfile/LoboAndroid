@@ -68,6 +68,7 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
                     String content = et.getText().toString();
                     String sender = workerName;
                     String cid = conversationid;
+                    Log.d("oma","CID: "+cid);
                     if(content.length() == 0){
                         return false;
                     }
@@ -80,7 +81,10 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
                     PostTask postTask = new PostTask(ConversationActivity.this);
                     String[] params = {"resources/Messages", "message", XML};
                     postTask.execute(params);
-                    chatClient.sendTextMessage(conversationid);
+                    if (chatClient == null){
+                        Log.d("oma","NULL CLIENT");
+                    }
+                    chatClient.sendTextMessage(cid);
                 }
                 return false;
             }
@@ -161,6 +165,7 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
             });
         } catch (WebSocketException e) {
             e.printStackTrace();
+            Log.d("oma","FAILED SOCKET");
         }
         /*URI uri;
         try {
