@@ -20,6 +20,13 @@ public class Alert {
         this.postName = postName;
     }
 
+    public Alert(){
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
     public int getID() {
         return id;
     }

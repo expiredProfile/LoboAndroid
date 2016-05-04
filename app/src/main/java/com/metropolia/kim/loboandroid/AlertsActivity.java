@@ -25,7 +25,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
     private SimpleCursorAdapter adapter;
 
     private String workerName;
-    private int range = -1;
+    private int range =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
     public void sendAlert () {
         //Get input
         int alertCatInput = catRadioGroup.getCheckedRadioButtonId();
-        int alertCat = -1;
+        int alertCat = 0;
 
         switch (alertCatInput) {
             case R.id.catRadio1: //Need assistance
@@ -76,7 +76,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
         }
 
         int alertRecInput = recRadioGroup.getCheckedRadioButtonId();
-        int alertRec = -1;
+        int alertRec = 0;
 
         switch (alertRecInput) {
             case R.id.recRadio1: //All

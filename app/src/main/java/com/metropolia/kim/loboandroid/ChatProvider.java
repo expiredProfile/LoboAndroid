@@ -55,7 +55,7 @@ public class ChatProvider extends ContentProvider {
         uriMatcher.addURI(PROVIDER_NAME,"messages/insert",INSERT_MESSAGE);
 
         uriMatcher.addURI(PROVIDER_NAME,"alerts/insert",INSERT_ALERT);
-        uriMatcher.addURI(PROVIDER_NAME,"alerts/range/#",ALERTS_HISTORY);
+        uriMatcher.addURI(PROVIDER_NAME,"alerts",ALERTS_HISTORY);
 
         uriMatcher.addURI(PROVIDER_NAME,"/members/insert",INSERT_MEMBER);
         uriMatcher.addURI(PROVIDER_NAME,"/members/flush",FLUSH_MEMBER);
@@ -164,7 +164,7 @@ public class ChatProvider extends ContentProvider {
         }
 
 
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+       // c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
 

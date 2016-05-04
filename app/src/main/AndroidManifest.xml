@@ -50,6 +50,10 @@
             android:authorities="com.example.provider.chatProvider"
             android:name=".ChatProvider"/>
 
+        <service
+            android:name=".AlertService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
