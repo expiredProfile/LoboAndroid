@@ -74,6 +74,7 @@ public class MessageXmlParser {
         int convID = 0;
         String currentTime = null;
         String shortTime = null;
+        int messageid = 0;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -89,12 +90,22 @@ public class MessageXmlParser {
                 currentTime = readCurrentTime(parser);
             } else if (xmlName.equals("shortTimeStamp")) {
                 shortTime = readShortTime(parser);
-            } else {
+            } else if (xmlName.equals("messageID")) {
+                messageid = Integer.valueOf(readMessageid(parser));
+            }else {
                 skip(parser);
             }
         }
-        return new Message(content, postName, convID, currentTime, shortTime);
+        return new Message(content, postName, convID, currentTime, shortTime, messageid);
     }
+
+    public String readMessageid(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "messageID");
+        String summary = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "messageID");
+        return summary;
+    }
+
 
     public String readContent(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "content");

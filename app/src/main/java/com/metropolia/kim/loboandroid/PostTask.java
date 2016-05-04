@@ -32,14 +32,21 @@ public class PostTask extends AsyncTask<String, String, String> {
     private HttpURLConnection httpURLConnection;
 
     //private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
-    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
-    private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
+    private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
+    //private String baseurl = "http://192.168.0.14:8080/LoboChat/"; //Henks hima
+    //private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
+    private Obsrvr obsrvr;
+
 
     private Context context;
     public PostTask(Context context) {
         this.context = context;
     }
 
+
+    public void register(Obsrvr o){
+        obsrvr = o;
+    }
     @Override
     protected String doInBackground(String... params) {
         String endurl = params[0];
@@ -75,6 +82,13 @@ public class PostTask extends AsyncTask<String, String, String> {
                     break;
 
                 case "message":
+                    bufferedWriter.write(xml);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+
+                    int resp = httpURLConnection.getResponseCode();
+                    Log.d("kek", "response: " + resp);
+                    os.close();
                     break;
                 case "alert":
                     bufferedWriter.write(xml);
@@ -88,8 +102,8 @@ public class PostTask extends AsyncTask<String, String, String> {
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                         int newAlertId = Integer.parseInt(bufferedReader.readLine());
                         Log.d("ALERT POST", "Server returned alert id: " + newAlertId);
-                        //get alert by ID for notification etc
                         is.close();
+                        //get alert by ID for notification etc
                     } catch (Exception e) {
                         Log.d("ALERT POST", "Exception in inputStream: " + e);
                     }

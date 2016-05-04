@@ -19,10 +19,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
+        implements Obsrvr, NavigationView.OnNavigationItemSelectedListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
     private Intent alertIntent;
     private Intent usersIntent;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     private String workerTitle;
     private ListView lv;
     private boolean first = true;
+
+    Intent serviceIntent;
 
 
     @Override
@@ -60,7 +63,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         //TextView username = (TextView)findViewById(R.id.textUsername);
         //TextView title = (TextView)findViewById(R.id.textProfession);
         Intent i = getIntent();
@@ -69,9 +71,11 @@ public class MainActivity extends AppCompatActivity
 
         lv = (ListView) findViewById(R.id.myListView);
 
+
         if (first) {
             NetworkingTask nt = new NetworkingTask(this);
             String[] params = {"resources/Conversations/" + workerName, "conversation"};
+            nt.register(this);
             nt.execute(params);
         }
         fillData();
@@ -100,15 +104,39 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Start service
+        serviceIntent = new Intent(this, NotificationService.class);
+        startService(serviceIntent);
+    }
 
-    //creates the three dots on the up right of the tool bar
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "NotificationService stopping", Toast.LENGTH_SHORT).show();
+        stopService(serviceIntent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent i = new Intent(this, MessageBackgroundService.class);
+        i.putExtra("workerName",workerName);
+        startService(i);
+    }
+//creates the three dots on the up right of the tool bar
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("oma", "onResume else");
+        Log.d("oma", "onResume");
+        Intent stop = new Intent(this, MessageBackgroundService.class);
+        stopService(stop);
         NetworkingTask nt = new NetworkingTask(this);
         String[] params = {"resources/Conversations/" + workerName, "conversation"};
+        nt.register(this);
         nt.execute(params);
     }
 
@@ -139,6 +167,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         alertIntent = new Intent(this, AlertsActivity.class);
         alertIntent.putExtra("workerName",workerName);
+        alertIntent.putExtra("workerTitle",workerTitle);
+
         usersIntent = new Intent(this, UsersActivity.class);
         usersIntent.putExtra("workerName", workerName);
         // Handle navigation view item clicks here.
@@ -188,5 +218,10 @@ public class MainActivity extends AppCompatActivity
     public void onLoaderReset(android.content.Loader<Cursor> loader) {
         Log.d(MYNAME, "onLoaderReset()");
         myAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void update() {
+        getLoaderManager().restartLoader(0,null, this);
     }
 }

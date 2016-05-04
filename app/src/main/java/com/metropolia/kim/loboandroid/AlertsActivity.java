@@ -25,6 +25,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
     private SimpleCursorAdapter adapter;
 
     private String workerName;
+    private String workerTitle;
     private int range = -1;
 
     @Override
@@ -44,6 +45,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
+        workerTitle = i.getStringExtra("workerTitle");
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -95,7 +97,8 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
         String alertXml = "<alert><alertCat>" + alertCat + "</alertCat>" +
                 "<receiverGroup>" + alertRec + "</receiverGroup>" +
-                "<postName>" + workerName + "</postName></alert>";
+                "<postName>" + workerName + "</postName>" +
+                "<postTitle>" + workerTitle + "</postTitle></alert>";
 
         String[] params = {"resources/Alerts", "alert", alertXml};
         PostTask postTask = new PostTask(this);
@@ -143,7 +146,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d("ALERT","onCreateLoader()");
         String[] projection = {"_id", "topic", "postname", "currenttime", "receivergroup"};
-        Uri uri = Uri.parse(ChatProvider.URL + "alerts/range/" + range); //RANGE HERE
+        Uri uri = Uri.parse(ChatProvider.URL + "alerts");
         return new CursorLoader(this, uri, projection, null, null, null);
     }
 

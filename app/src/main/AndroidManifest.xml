@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.metropolia.kim.loboandroid">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -10,34 +11,27 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".AlertsActivity"
             android:label="Alerts"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".UsersActivity"
             android:label="Users"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".CreateConversationActivity"
             android:label="New Conversation"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ConversationActivity"
             android:label="Conversation"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,10 +40,21 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:authorities="com.example.provider.chatProvider"
-            android:name=".ChatProvider"/>
+        <activity android:name=".AlertNotifierActivity"></activity>
 
+        <provider
+            android:name=".ChatProvider"
+            android:authorities="com.example.provider.chatProvider" />
+
+        <service
+            android:name=".MessageBackgroundService"
+            android:enabled="true"
+            android:exported="false"></service>
+
+        <service
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

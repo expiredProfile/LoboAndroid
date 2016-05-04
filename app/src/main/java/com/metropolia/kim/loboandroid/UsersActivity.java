@@ -46,7 +46,7 @@ public class UsersActivity extends AppCompatActivity implements android.app.Load
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        String[] params = {"resources/Workers/LoggedOut", "worker"};
+        String[] params = {"resources/Workers/All", "worker"};
         NetworkingTask networkTask = new NetworkingTask(this);
         networkTask.execute(params);
         fillData();

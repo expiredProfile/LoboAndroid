@@ -31,8 +31,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = login.getText().toString();
                 if (name == ""){
-                    Toast toast = Toast.makeText(getApplicationContext(),"Please insert your username",Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast.makeText(LoginActivity.this, "Please insert credentials.", Toast.LENGTH_SHORT).show();
                 } else {
                     LoginTask lt = new LoginTask(LoginActivity.this);
                     String[] params = {name};
@@ -42,5 +41,11 @@ public class LoginActivity extends AppCompatActivity {
                 //startActivity(intent);
             }
         });
+
+        String[] paramsW = {"resources/Workers/All", "worker"};
+        NetworkingTask networkTask = new NetworkingTask(this);
+        networkTask.execute(paramsW);
     }
+
+
 }

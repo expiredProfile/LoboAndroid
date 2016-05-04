@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-
+import android.widget.Toast;
 import com.metropolia.kim.loboandroiddata.Worker;
 import com.metropolia.kim.xmlparser.WorkerXmlParser;
-
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,6 +19,7 @@ import java.util.List;
 public class LoginTask extends AsyncTask<String, String, Boolean> {
     private Context context;
 
+    //private String baseurl = "http://192.168.0.14:8080/LoboChat/"; // henkka hima
     //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; // henkka
     //private String baseurl = "http://192.168.43.9:8080/LoboChat/"; // kim
     private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
@@ -77,6 +77,8 @@ public class LoginTask extends AsyncTask<String, String, Boolean> {
                     this.wname = name;
                     this.wtitle = w.getTitle();
                     allow = true;
+                } else {
+                    Toast.makeText(this.context, "False credentials.", Toast.LENGTH_SHORT).show();
                 }
             }
 
