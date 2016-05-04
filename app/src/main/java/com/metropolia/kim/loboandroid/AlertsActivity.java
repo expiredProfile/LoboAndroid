@@ -25,8 +25,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
     private SimpleCursorAdapter adapter;
 
     private String workerName;
-    private String workerTitle;
-    private int range =0;
+    private int range = 0;
 
 
     @Override
@@ -46,7 +45,6 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
-        workerTitle = i.getStringExtra("workerTitle");
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -98,8 +96,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
         String alertXml = "<alert><alertCat>" + alertCat + "</alertCat>" +
                 "<receiverGroup>" + alertRec + "</receiverGroup>" +
-                "<postName>" + workerName + "</postName>" +
-                "<postTitle>" + workerTitle + "</postTitle></alert>";
+                "<postName>" + workerName + "</postName></alert>";
 
         String[] params = {"resources/Alerts", "alert", alertXml};
         PostTask postTask = new PostTask(this);

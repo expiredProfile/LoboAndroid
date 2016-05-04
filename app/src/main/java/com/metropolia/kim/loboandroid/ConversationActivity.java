@@ -141,7 +141,8 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
         chatClient = new WebSocketConnection();
 
         //String wsuri = "ws://192.168.0.14:8080/LoboChat/chatend"; //henks hima
-        String wsuri = "ws://192.168.43.109:8080/LoboChat/chatend";
+       // String wsuri = "ws://192.168.43.109:8080/LoboChat/chatend";
+        String wsuri = "ws://192.168.43.9:8080/LoboChat/chatend";
 
         try {
             chatClient.connect(wsuri, new WebSocketHandler(){

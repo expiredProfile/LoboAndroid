@@ -34,9 +34,6 @@ public class MainActivity extends AppCompatActivity
     private ListView lv;
     private boolean first = true;
 
-    Intent serviceIntent;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +66,11 @@ public class MainActivity extends AppCompatActivity
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
 
-        // Starting the service
+        // Starting the alert service
         Log.d("kek,", workerTitle);
-        Intent alerIntent = new Intent(getBaseContext(), AlertService.class);
-        alerIntent.putExtra("title", workerTitle);
-        startService(alerIntent);
+        Intent alertIntent = new Intent(getBaseContext(), AlertService.class);
+        alertIntent.putExtra("title", workerTitle);
+        startService(alertIntent);
 
         lv = (ListView) findViewById(R.id.myListView);
 
@@ -113,16 +110,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        //Start service
-        serviceIntent = new Intent(this, NotificationService.class);
-        startService(serviceIntent);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "NotificationService stopping", Toast.LENGTH_SHORT).show();
-        stopService(serviceIntent);
     }
 
     @Override
@@ -132,10 +124,12 @@ public class MainActivity extends AppCompatActivity
         i.putExtra("workerName",workerName);
         startService(i);
         // Stopping the service |
+        // Stopping the alert service
         Log.d("kek", "stop");
         stopService(new Intent(getBaseContext(), AlertService.class));
     }
-//creates the three dots on the up right of the tool bar
+
+    //creates the three dots on the up right of the tool bar
 
     @Override
     protected void onResume() {

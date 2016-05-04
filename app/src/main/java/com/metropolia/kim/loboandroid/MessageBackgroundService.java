@@ -36,8 +36,8 @@ public class MessageBackgroundService extends Service implements Obsrvr {
     private String workerName;
     private List<Conversation> conversations;
     private ArrayList<String> cids;
-    //private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
-    private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
+    private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
+    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
     //private String baseurl = "http://192.168.0.14:8080/LoboChat/"; //Henks hima
     private WebSocketConnection chatClient;
     private String message;

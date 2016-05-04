@@ -14,9 +14,9 @@ public class AlertService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("kek", "service");
+        Log.d("ALERT SERVICE", "alert service");
         String title = intent.getStringExtra("title");
-        Log.d("service", "." +title);
+        Log.d("service", "Extra: " + title);
         AlertTask alertTask = new AlertTask(this, title);
         alertTask.execute("..");
         return super.onStartCommand(intent, flags, startId);

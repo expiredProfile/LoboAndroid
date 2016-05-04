@@ -40,8 +40,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AlertNotifierActivity"></activity>
-
         <provider
             android:name=".ChatProvider"
             android:authorities="com.example.provider.chatProvider" />
@@ -53,6 +51,7 @@
 
         <service
             android:name=".AlertService"
+            android:enabled="true"
             android:exported="false"/>
 
     </application>

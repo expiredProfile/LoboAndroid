@@ -151,7 +151,6 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
                         values.put("currenttime", a.getCurrentTime());
                         values.put("category", a.getAlertCat());
                         values.put("postname", a.getPostName());
-                        values.put("posttitle", a.getPostTitle());
                         values.put("receivergroup", a.getReceiverGroup());
 
                         Uri uri = Uri.parse(ChatProvider.URL + "/alerts/insert");
