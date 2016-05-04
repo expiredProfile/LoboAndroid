@@ -12,6 +12,30 @@ import android.util.Log;
  */
 public class AlertService extends Service {
 
+    private String title;
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        title = intent.getStringExtra("title");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    Log.d("kek", "service");
+                    Log.d("service", "." +title);
+                    AlertTask alertTask = new AlertTask(AlertService.this, title);
+                    alertTask.execute("..");
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }).start();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

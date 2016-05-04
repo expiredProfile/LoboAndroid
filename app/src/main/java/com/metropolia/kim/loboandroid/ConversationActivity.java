@@ -94,6 +94,7 @@ public class ConversationActivity extends AppCompatActivity implements Obsrvr, a
         conversationid = i.getStringExtra("conversationid");
         workerName = i.getStringExtra("workerName");
         topic = i.getStringExtra("topic");
+        getSupportActionBar().setTitle(topic);
         lv = (ListView)findViewById(R.id.messagelist);
         Log.d("oma", "CID: "+conversationid+" Name: "+workerName+" Topic: "+topic);
         fillData();

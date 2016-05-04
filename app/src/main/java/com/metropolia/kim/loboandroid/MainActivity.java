@@ -21,6 +21,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 
 public class MainActivity extends AppCompatActivity
         implements Obsrvr, NavigationView.OnNavigationItemSelectedListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
@@ -95,6 +97,13 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView username = (TextView) headerLayout.findViewById(R.id.textUsername);
+        username.setText(workerName);
+        TextView profession = (TextView) headerLayout.findViewById(R.id.textProfession);
+        profession.setText(workerTitle);
+
     }
 
     @Override
@@ -115,6 +124,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent i = new Intent(this, MessageBackgroundService.class);
+        i.putExtra("workerName",workerName);
+        startService(i);
+
+        // Stopping the alert service
+        Log.d("kek", "stop");
+        stopService(new Intent(getBaseContext(), AlertService.class));
     }
 
     @Override
