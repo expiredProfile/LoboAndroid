@@ -110,10 +110,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-<<<<<<< HEAD
 
-=======
->>>>>>> 785b6ab41777ef6ca73fe10ebdf401c780f17e9c
     }
 
     @Override
@@ -121,9 +118,7 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-<<<<<<< HEAD
-//creates the three dots on the up right of the tool bar
-=======
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -137,7 +132,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     //creates the three dots on the up right of the tool bar
->>>>>>> 785b6ab41777ef6ca73fe10ebdf401c780f17e9c
 
     @Override
     protected void onResume() {
@@ -197,21 +191,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-<<<<<<< HEAD
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // Stopping the service |
-        Log.d("kek", "stop");
-        stopService(new Intent(getBaseContext(), AlertService.class));
-
-        Intent i = new Intent(this, MessageBackgroundService.class);
-        i.putExtra("workerName",workerName);
-        startService(i);
-    }
-
-=======
->>>>>>> 785b6ab41777ef6ca73fe10ebdf401c780f17e9c
     private void fillData() {
         String[] fromColumns = {"conversationid", "topic", "lastmessage"}; // from which COLUMNS
         int[] toViews = {R.id.cid, R.id.topic, R.id.message}; // TO which VIEWS
