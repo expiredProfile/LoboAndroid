@@ -46,7 +46,10 @@
             android:name=".ChatProvider"
             android:authorities="com.example.provider.chatProvider" />
 
-
+        <service
+            android:name=".MessageBackgroundService"
+            android:enabled="true"
+            android:exported="false"></service>
 
         <service
             android:name=".NotificationService"

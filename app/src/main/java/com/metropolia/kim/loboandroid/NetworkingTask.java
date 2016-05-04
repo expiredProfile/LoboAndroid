@@ -44,6 +44,7 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
         String dataType = params[1];
         try {
             URL url = new URL(baseurl + endurl);
+            Log.d("oma",url.toString());
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(20000);
             httpURLConnection.setReadTimeout(20000);
@@ -166,7 +167,9 @@ public class NetworkingTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        observer.update();
+        if (observer != null){
+            observer.update();
+        }
         observer = null;
 
     }

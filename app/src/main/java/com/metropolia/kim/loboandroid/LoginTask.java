@@ -3,6 +3,7 @@ package com.metropolia.kim.loboandroid;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.metropolia.kim.loboandroiddata.Worker;
 import com.metropolia.kim.xmlparser.WorkerXmlParser;
@@ -73,6 +74,8 @@ public class LoginTask extends AsyncTask<String, String, Boolean> {
                     this.wname = name;
                     this.wtitle = w.getTitle();
                     allow = true;
+                } else {
+                    Toast.makeText(this.context, "False credentials.", Toast.LENGTH_SHORT).show();
                 }
             }
 
