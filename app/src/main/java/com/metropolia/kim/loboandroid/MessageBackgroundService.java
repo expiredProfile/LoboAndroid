@@ -158,7 +158,7 @@ public class MessageBackgroundService extends Service implements Obsrvr {
     public void makeNotification(String topic, int cid, String msg) {
         //Service notification
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_chat_black_24dp)
+                .setSmallIcon(R.drawable.ic_sms_white_24dp)
                 .setAutoCancel(true)
                 .setContentTitle("New message in "+topic)
                 .setContentText(msg)

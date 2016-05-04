@@ -99,7 +99,7 @@ public class AlertTask extends AsyncTask<String, String, String> {
     private void sentNotification(String topic, String postName) {
         //Service notification
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_chat_bubble)
+                .setSmallIcon(R.drawable.ic_warning_white_18dp)
                 .setAutoCancel(true)
                 .setContentTitle(topic)
                 .setContentText(postName);
