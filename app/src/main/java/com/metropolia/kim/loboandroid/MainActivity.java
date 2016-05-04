@@ -69,6 +69,12 @@ public class MainActivity extends AppCompatActivity
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
 
+        // Starting the service
+        Log.d("kek,", workerTitle);
+        Intent alerIntent = new Intent(getBaseContext(), AlertService.class);
+        alerIntent.putExtra("title", workerTitle);
+        startService(alerIntent);
+
         lv = (ListView) findViewById(R.id.myListView);
 
 
@@ -185,6 +191,14 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Stopping the service |
+        Log.d("kek", "stop");
+        stopService(new Intent(getBaseContext(), AlertService.class));
     }
 
     private void fillData() {

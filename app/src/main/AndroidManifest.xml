@@ -52,9 +52,9 @@
             android:exported="false"></service>
 
         <service
-            android:name=".NotificationService"
-            android:enabled="true"
-            android:exported="false"></service>
+            android:name=".AlertService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
