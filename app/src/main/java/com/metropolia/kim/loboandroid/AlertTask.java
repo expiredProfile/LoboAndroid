@@ -29,7 +29,8 @@ public class AlertTask extends AsyncTask<String, String, String> {
     private HttpURLConnection httpURLConnection;
 
     //private String baseurl = "http://192.168.43.9:8080/LoboChat/";// kim
-//private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
+    //private String baseurl = "http://192.168.43.109:8080/LoboChat/"; //Henks
+
     private String baseurl = "http://10.0.2.2:8080/LoboChat/"; //tommi
     private int professionId;
 
@@ -113,7 +114,6 @@ public class AlertTask extends AsyncTask<String, String, String> {
     }
 
     private int getAlertsFromDatabase() {
-        ArrayList<Alert> alerts = new ArrayList<>();
         String URL = ChatProvider.URL + "/alerts";
         Uri alertsUri = Uri.parse(URL);
         int max = -1;
@@ -126,7 +126,7 @@ public class AlertTask extends AsyncTask<String, String, String> {
                         max = idTemp;
                     }
                 } while (c.moveToNext());
-                Log.d("kek", "." + max);
+                Log.d("kek", "getAlertsFromDatabase max: " + max);
             }//if
         }
         return max;
