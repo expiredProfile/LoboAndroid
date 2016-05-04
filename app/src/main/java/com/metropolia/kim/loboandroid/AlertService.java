@@ -14,6 +14,7 @@ public class AlertService extends Service {
     private String title;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+<<<<<<< HEAD
         title = intent.getStringExtra("title");
         new Thread(new Runnable() {
             @Override
@@ -33,6 +34,13 @@ public class AlertService extends Service {
             }
         }).start();
 
+=======
+        Log.d("ALERT SERVICE", "alert service");
+        String title = intent.getStringExtra("title");
+        Log.d("service", "Extra: " + title);
+        AlertTask alertTask = new AlertTask(this, title);
+        alertTask.execute("..");
+>>>>>>> 785b6ab41777ef6ca73fe10ebdf401c780f17e9c
         return super.onStartCommand(intent, flags, startId);
     }
 

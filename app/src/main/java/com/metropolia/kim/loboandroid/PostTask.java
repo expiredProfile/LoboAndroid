@@ -97,6 +97,7 @@ public class PostTask extends AsyncTask<String, String, String> {
 
                     int alertResponseCode = httpURLConnection.getResponseCode();
                     Log.d("POST", "alert post response: " + alertResponseCode);
+                    /*
                     try {
                         InputStream is = httpURLConnection.getInputStream();
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
@@ -107,6 +108,7 @@ public class PostTask extends AsyncTask<String, String, String> {
                     } catch (Exception e) {
                         Log.d("ALERT POST", "Exception in inputStream: " + e);
                     }
+                    */
                     os.close();
                     break;
             }

@@ -28,7 +28,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
     private String workerName;
     private String workerTitle;
-    private int range =0;
+    private int range = 0;
 
 
     @Override
@@ -117,8 +117,7 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
 
         String alertXml = "<alert><alertCat>" + alertCat + "</alertCat>" +
                 "<receiverGroup>" + alertRec + "</receiverGroup>" +
-                "<postName>" + workerName + "</postName>" +
-                "<postTitle>" + workerTitle + "</postTitle></alert>";
+                "<postName>" + workerName + "</postName></alert>";
 
         String[] params = {"resources/Alerts", "alert", alertXml};
         PostTask postTask = new PostTask(this);

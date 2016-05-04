@@ -34,9 +34,6 @@ public class MainActivity extends AppCompatActivity
     private ListView lv;
     private boolean first = true;
 
-    Intent serviceIntent;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +66,11 @@ public class MainActivity extends AppCompatActivity
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
 
-        // Starting the service
+        // Starting the alert service
         Log.d("kek,", workerTitle);
-        Intent alerIntent = new Intent(getBaseContext(), AlertService.class);
-        alerIntent.putExtra("title", workerTitle);
-        startService(alerIntent);
+        Intent alertIntent = new Intent(getBaseContext(), AlertService.class);
+        alertIntent.putExtra("title", workerTitle);
+        startService(alertIntent);
 
         lv = (ListView) findViewById(R.id.myListView);
 
@@ -113,7 +110,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 785b6ab41777ef6ca73fe10ebdf401c780f17e9c
     }
 
     @Override
@@ -121,7 +121,23 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
     }
 
+<<<<<<< HEAD
 //creates the three dots on the up right of the tool bar
+=======
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent i = new Intent(this, MessageBackgroundService.class);
+        i.putExtra("workerName",workerName);
+        startService(i);
+
+        // Stopping the alert service
+        Log.d("kek", "stop");
+        stopService(new Intent(getBaseContext(), AlertService.class));
+    }
+
+    //creates the three dots on the up right of the tool bar
+>>>>>>> 785b6ab41777ef6ca73fe10ebdf401c780f17e9c
 
     @Override
     protected void onResume() {
@@ -181,6 +197,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+<<<<<<< HEAD
     @Override
     protected void onStop() {
         super.onStop();
@@ -193,6 +210,8 @@ public class MainActivity extends AppCompatActivity
         startService(i);
     }
 
+=======
+>>>>>>> 785b6ab41777ef6ca73fe10ebdf401c780f17e9c
     private void fillData() {
         String[] fromColumns = {"conversationid", "topic", "lastmessage"}; // from which COLUMNS
         int[] toViews = {R.id.cid, R.id.topic, R.id.message}; // TO which VIEWS
