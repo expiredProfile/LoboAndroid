@@ -52,7 +52,7 @@ public class AlertTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        while (true) {
+       // while (true) {
             int largestInDatabase = this.getAlertsFromDatabase();
             try {
                 URL url = new URL(baseurl + "resources/Alerts/Alerthistory/2");
@@ -91,8 +91,9 @@ public class AlertTask extends AsyncTask<String, String, String> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            SystemClock.sleep(10000);
-        }
+            //SystemClock.sleep(10000);
+       // }
+        return null;
     }
 
     private void sentNotification(String topic, String postName) {

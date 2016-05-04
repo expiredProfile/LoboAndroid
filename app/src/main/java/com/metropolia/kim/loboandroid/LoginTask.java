@@ -73,13 +73,12 @@ public class LoginTask extends AsyncTask<String, String, Boolean> {
             ArrayList<String> workerStr = new ArrayList<>();
 
             for(Worker w : workers){
-                if (w.getName().equals(name)){
+                if (w.getName().equals(name)) {
                     this.wname = name;
                     this.wtitle = w.getTitle();
                     allow = true;
-                } else {
-                    Toast.makeText(this.context, "False credentials.", Toast.LENGTH_SHORT).show();
                 }
+
             }
 
 

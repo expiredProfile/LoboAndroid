@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
@@ -39,6 +41,9 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Button sendAlert = (Button)findViewById(R.id.sendAlertBtn);
+        Button getHistory = (Button)findViewById(R.id.sendAlertBtn);
+
         catRadioGroup = (RadioGroup) findViewById(R.id.catRadioGroup);
         recRadioGroup = (RadioGroup) findViewById(R.id.recRadioGroup);
         hisRadioGroup = (RadioGroup) findViewById(R.id.hisRadioGroup);
@@ -47,6 +52,20 @@ public class AlertsActivity extends AppCompatActivity implements android.app.Loa
         Intent i = getIntent();
         workerName = i.getStringExtra("workerName");
         workerTitle = i.getStringExtra("workerTitle");
+
+        sendAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendAlert();
+            }
+        });
+
+        getHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAlertHistory();
+            }
+        });
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
